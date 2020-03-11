@@ -4,15 +4,9 @@ A go client for the Onix Web API.
 
 An example of how to use is below:
 
-```go
-package main
-
-import (
-    "github.com/gatblau/oxc"
-)
-```
-
 ```go 
+import "github.com/gatblau/oxc"
+
 model := &Model {
     Key:         "test_model",
     Name:        "Test Model",
