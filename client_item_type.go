@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Item Type data as payload to the resource URI
-func (c *Client) putItemType(itemType *ItemType) (*Result, error) {
+func (c *Client) PutItemType(itemType *ItemType) (*Result, error) {
 	// validates item type
 	if err := itemType.valid(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (c *Client) putItemType(itemType *ItemType) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteItemType(itemType *ItemType) (*Result, error) {
+func (c *Client) DeleteItemType(itemType *ItemType) (*Result, error) {
 	uri, err := itemType.uri(c.BaseURL)
 
 	if err != nil {
@@ -54,7 +54,7 @@ func (c *Client) deleteItemType(itemType *ItemType) (*Result, error) {
 
 // issue a get http request to the resource URI
 // itemType: an instance of the Item Type with the key of the item to retrieve
-func (c *Client) getItemType(itemType *ItemType) (*ItemType, error) {
+func (c *Client) GetItemType(itemType *ItemType) (*ItemType, error) {
 	uri, err := itemType.uri(c.BaseURL)
 
 	if err != nil {

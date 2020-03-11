@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Item data as payload to the resource URI
-func (c *Client) putItem(item *Item) (*Result, error) {
+func (c *Client) PutItem(item *Item) (*Result, error) {
 	// validates item
 	if err := item.valid(); err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (c *Client) putItem(item *Item) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteItem(item *Item) (*Result, error) {
+func (c *Client) DeleteItem(item *Item) (*Result, error) {
 	uri, err := item.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *Client) deleteItem(item *Item) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getItem(item *Item) (*Item, error) {
+func (c *Client) GetItem(item *Item) (*Item, error) {
 	uri, err := item.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

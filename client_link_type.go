@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the link type data as payload to the resource URI
-func (c *Client) putLinkType(linkType *LinkType) (*Result, error) {
+func (c *Client) PutLinkType(linkType *LinkType) (*Result, error) {
 	// validates linkType
 	if err := linkType.valid(); err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (c *Client) putLinkType(linkType *LinkType) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteLinkType(linkType *LinkType) (*Result, error) {
+func (c *Client) DeleteLinkType(linkType *LinkType) (*Result, error) {
 	uri, err := linkType.uri(c.BaseURL)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (c *Client) deleteLinkType(linkType *LinkType) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getLinkType(linkType *LinkType) (*LinkType, error) {
+func (c *Client) GetLinkType(linkType *LinkType) (*LinkType, error) {
 	uri, err := linkType.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

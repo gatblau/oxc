@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Link Type Attribute data as payload to the resource URI
-func (c *Client) putLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
+func (c *Client) PutLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
 	// validates typeAttr
 	if err := typeAttr.valid(); err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (c *Client) putLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
+func (c *Client) DeleteLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
 	uri, err := typeAttr.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *Client) deleteLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getLinkTypeAttr(typeAttr *LinkTypeAttribute) (*LinkTypeAttribute, error) {
+func (c *Client) GetLinkTypeAttr(typeAttr *LinkTypeAttribute) (*LinkTypeAttribute, error) {
 	uri, err := typeAttr.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

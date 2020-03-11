@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Link rule data as payload to the resource URI
-func (c *Client) putLinkRule(linkRule *LinkRule) (*Result, error) {
+func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 	// validates link rule
 	if err := linkRule.valid(); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (c *Client) putLinkRule(linkRule *LinkRule) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteLinkRule(linkRule *LinkRule) (*Result, error) {
+func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
 	uri, err := linkRule.uri(c.BaseURL)
 
 	if err != nil {
@@ -50,7 +50,7 @@ func (c *Client) deleteLinkRule(linkRule *LinkRule) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getLinkRule(linkRule *LinkRule) (*LinkRule, error) {
+func (c *Client) GetLinkRule(linkRule *LinkRule) (*LinkRule, error) {
 	uri, err := linkRule.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

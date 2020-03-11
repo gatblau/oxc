@@ -42,7 +42,7 @@ func init() {
 	//	panic(err)
 	//}
 
-	client.setAuthToken(t)
+	client.SetAuthToken(t)
 }
 
 func checkResult(result *Result, err error, msg string, t *testing.T) {
@@ -67,7 +67,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Name:        "Test Model",
 		Description: "Test Model",
 	}
-	result, err := client.putModel(model)
+	result, err := client.PutModel(model)
 	checkResult(result, err, msg, t)
 
 	itemType := &ItemType{
@@ -80,7 +80,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Managed:      true,
 		NotifyChange: true,
 	}
-	result, err = client.putItemType(itemType)
+	result, err = client.PutItemType(itemType)
 	checkResult(result, err, "create test_item_type failed", t)
 
 	item_1 := &Item{
@@ -91,7 +91,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Type:        "test_item_type",
 		Txt:         "This is a test text configuration.",
 	}
-	result, err = client.putItem(item_1)
+	result, err = client.PutItem(item_1)
 	checkResult(result, err, "create item_1 failed", t)
 
 	item_2 := &Item{
@@ -101,7 +101,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Status:      2,
 		Type:        "test_item_type",
 	}
-	result, err = client.putItem(item_2)
+	result, err = client.PutItem(item_2)
 	checkResult(result, err, "create item_2 failed", t)
 
 	link_type := &LinkType{
@@ -110,7 +110,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Description: "Test Link Type",
 		Model:       "test_model",
 	}
-	result, err = client.putLinkType(link_type)
+	result, err = client.PutLinkType(link_type)
 	checkResult(result, err, "create test_link_type failed", t)
 
 	link_rule := &LinkRule{
@@ -121,7 +121,7 @@ func TestOnixClient_Put(t *testing.T) {
 		StartItemTypeKey: "test_item_type",
 		EndItemTypeKey:   "test_item_type",
 	}
-	result, err = client.putLinkRule(link_rule)
+	result, err = client.PutLinkRule(link_rule)
 	checkResult(result, err, "create test_item_type->test_item_type rule failed", t)
 
 	link := &Link{
@@ -131,6 +131,6 @@ func TestOnixClient_Put(t *testing.T) {
 		StartItemKey: "item_1",
 		EndItemKey:   "item_2",
 	}
-	result, err = client.putLink(link)
+	result, err = client.PutLink(link)
 	checkResult(result, err, "create link_1 failed", t)
 }

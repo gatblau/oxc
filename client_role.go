@@ -17,7 +17,7 @@
 package oxc
 
 // issue a put http request with the Role data as payload to the resource URI
-func (c *Client) putRole(role *Role) (*Result, error) {
+func (c *Client) PutRole(role *Role) (*Result, error) {
 	// validates role
 	if err := role.valid(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (c *Client) putRole(role *Role) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteRole(role *Role) (*Result, error) {
+func (c *Client) DeleteRole(role *Role) (*Result, error) {
 	uri, err := role.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *Client) deleteRole(role *Role) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getRole(role *Role) (*Role, error) {
+func (c *Client) GetRole(role *Role) (*Role, error) {
 	uri, err := role.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

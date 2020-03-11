@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Item Type Attribute data as payload to the resource URI
-func (c *Client) putItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
+func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	// validates item type attribute
 	if err := typeAttr.valid(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (c *Client) putItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
+func (c *Client) DeleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	uri, err := typeAttr.uri(c.BaseURL)
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (c *Client) deleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getItemTypeAttr(typeAttr *ItemTypeAttribute) (*ItemTypeAttribute, error) {
+func (c *Client) GetItemTypeAttr(typeAttr *ItemTypeAttribute) (*ItemTypeAttribute, error) {
 	uri, err := typeAttr.uri(c.BaseURL)
 
 	if err != nil {

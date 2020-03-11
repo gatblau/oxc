@@ -16,7 +16,7 @@
 package oxc
 
 // issue a put http request with the Link data as payload to the resource URI
-func (c *Client) putLink(link *Link) (*Result, error) {
+func (c *Client) PutLink(link *Link) (*Result, error) {
 	// validates link
 	if err := link.valid(); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func (c *Client) putLink(link *Link) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteLink(link *Link) (*Result, error) {
+func (c *Client) DeleteLink(link *Link) (*Result, error) {
 	uri, err := link.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (c *Client) deleteLink(link *Link) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getLink(link *Link) (*Link, error) {
+func (c *Client) GetLink(link *Link) (*Link, error) {
 	uri, err := link.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

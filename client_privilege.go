@@ -17,7 +17,7 @@
 package oxc
 
 // issue a put http request with the Privilege data as payload to the resource URI
-func (c *Client) putPrivilege(privilege *Privilege) (*Result, error) {
+func (c *Client) PutPrivilege(privilege *Privilege) (*Result, error) {
 	// validates privilege
 	if err := privilege.valid(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (c *Client) putPrivilege(privilege *Privilege) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deletePrivilege(privilege *Privilege) (*Result, error) {
+func (c *Client) DeletePrivilege(privilege *Privilege) (*Result, error) {
 	uri, err := privilege.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *Client) deletePrivilege(privilege *Privilege) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getPrivilege(privilege *Privilege) (*Privilege, error) {
+func (c *Client) GetPrivilege(privilege *Privilege) (*Privilege, error) {
 	uri, err := privilege.uri(c.BaseURL)
 	if err != nil {
 		return nil, err

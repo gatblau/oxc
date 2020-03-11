@@ -63,12 +63,12 @@ func (c *Client) newBasicToken(user string, pwd string) string {
 }
 
 // Set up the authentication token used by the client
-func (c *Client) setAuthToken(token string) {
+func (c *Client) SetAuthToken(token string) {
 	c.Token = token
 }
 
 // Gets an OAuth Bearer token
-func (c *Client) getBearerToken(tokenURI string, clientId string, secret string, user string, pwd string) (string, error) {
+func (c *Client) GetBearerToken(tokenURI string, clientId string, secret string, user string, pwd string) (string, error) {
 	// constructs a payload for the form POST to the authorisation server token URI
 	// passing the type of grant,the username, password and scopes
 	payload := strings.NewReader(

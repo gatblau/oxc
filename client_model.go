@@ -17,7 +17,7 @@
 package oxc
 
 // issue a put http request with the Model data as payload to the resource URI
-func (c *Client) putModel(model *Model) (*Result, error) {
+func (c *Client) PutModel(model *Model) (*Result, error) {
 	// validates model
 	if err := model.valid(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (c *Client) putModel(model *Model) (*Result, error) {
 }
 
 // issue a delete http request to the resource URI
-func (c *Client) deleteModel(model *Model) (*Result, error) {
+func (c *Client) DeleteModel(model *Model) (*Result, error) {
 	uri, err := model.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *Client) deleteModel(model *Model) (*Result, error) {
 }
 
 // issue a get http request to the resource URI
-func (c *Client) getModel(model *Model) (*Model, error) {
+func (c *Client) GetModel(model *Model) (*Model, error) {
 	uri, err := model.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
