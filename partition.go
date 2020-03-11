@@ -14,7 +14,7 @@
    to be licensed under the same terms as the rest of the code.
 */
 
-package main
+package oxc
 
 import (
 	"bytes"

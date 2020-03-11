@@ -13,7 +13,7 @@
    Contributors to this project, hereby assign copyright in this code to the project,
    to be licensed under the same terms as the rest of the code.
 */
-package main
+package oxc
 
 // issue a put http request with the Link Type Attribute data as payload to the resource URI
 func (c *Client) putLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {

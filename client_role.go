@@ -14,7 +14,7 @@
    to be licensed under the same terms as the rest of the code.
 */
 
-package main
+package oxc
 
 // issue a put http request with the Role data as payload to the resource URI
 func (c *Client) putRole(role *Role) (*Result, error) {
