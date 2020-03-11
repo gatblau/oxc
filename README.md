@@ -10,15 +10,16 @@ package main
 import (
     "github.com/gatblau/oxc"
 )
-func main() {
-    model := &Model {
-        Key:         "test_model",
-        Name:        "Test Model",
-        Description: "Test Model",
-    }
-    	
-    result, err := client.putModel(model)
+```
+
+```go 
+model := &Model {
+    Key:         "test_model",
+    Name:        "Test Model",
+    Description: "Test Model",
 }
+    
+result, err := client.putModel(model)
 ```
 
 More examples can be found [here](client_test.go).
