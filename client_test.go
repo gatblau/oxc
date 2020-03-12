@@ -26,7 +26,7 @@ func init() {
 	client = Client{BaseURL: "http://localhost:8080"}
 
 	// test using a basic authentication token
-	t := client.newBasicToken("admin", "0n1x")
+	t := client.NewBasicToken("admin", "0n1x")
 
 	// uncomment below & reset configuration vars
 	// to test using using an OAuth bearer token
@@ -82,6 +82,21 @@ func TestOnixClient_Put(t *testing.T) {
 	}
 	result, err = client.PutItemType(itemType)
 	checkResult(result, err, "create test_item_type failed", t)
+
+	itemTypeAttr := &ItemTypeAttribute{
+		Key:         "test_item_type_attr_1",
+		Name:        "Test Item Type Attribute 1",
+		Description: "Description for test_item_type_attr_1",
+		Type:        "csv",
+		DefValue:    "red, blue",
+		Managed:     false,
+		Required:    false,
+		Regex:       "",
+		ItemTypeKey: "test_item_type",
+	}
+
+	result, err = client.PutItemTypeAttr(itemTypeAttr)
+	checkResult(result, err, "create test_item_type_attr_1 failed", t)
 
 	item_1 := &Item{
 		Key:         "item_1",
