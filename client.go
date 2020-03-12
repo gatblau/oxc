@@ -145,15 +145,15 @@ func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Res
 		return &Result{Message: err.Error(), Error: true}, err
 	}
 
-	defer func() {
-		if ferr := response.Body.Close(); ferr != nil {
-			err = ferr
-		}
-	}()
-
 	// decodes the response
 	result := new(Result)
 	err = json.NewDecoder(response.Body).Decode(result)
+
+	if err != nil {
+		return result, err
+	}
+
+	err = response.Body.Close()
 
 	// returns the result
 	return result, err
@@ -172,6 +172,9 @@ func (c *Client) delete(url string) (*Result, error) {
 // Make a GET HTTP request to the WAPI
 func (c *Client) get(url string) (*http.Response, error) {
 	req, err := http.NewRequest(GET, url, nil)
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", c.Token)
 	resp, err := http.DefaultClient.Do(req)

@@ -51,23 +51,23 @@ func checkResult(result *Result, err error, msg string, t *testing.T) {
 	}
 	if result.Error {
 		t.Error(fmt.Sprintf("%s: %s", msg, result.Message))
-	}
-}
-
-func checkError(err error, msg string, t *testing.T) {
-	if err != nil {
-		t.Error(msg, err)
+	} else if result.Operation == "L" {
+		t.Error(fmt.Sprintf("Fail to update - Locked entity: %s", result.Ref))
 	}
 }
 
 func TestOnixClient_Put(t *testing.T) {
+	// clear all data!
+	result, err := client.Clear()
+	checkResult(result, err, "failed to clear database", t)
+
 	msg := "create test_model failed"
 	model := &Model{
 		Key:         "test_model",
 		Name:        "Test Model",
 		Description: "Test Model",
 	}
-	result, err := client.PutModel(model)
+	result, err = client.PutModel(model)
 	checkResult(result, err, msg, t)
 
 	itemType := &ItemType{
@@ -85,10 +85,10 @@ func TestOnixClient_Put(t *testing.T) {
 
 	itemTypeAttr := &ItemTypeAttribute{
 		Key:         "test_item_type_attr_1",
-		Name:        "Test Item Type Attribute 1",
+		Name:        "CPU",
 		Description: "Description for test_item_type_attr_1",
-		Type:        "csv",
-		DefValue:    "red, blue",
+		Type:        "integer",
+		DefValue:    "2",
 		Managed:     false,
 		Required:    false,
 		Regex:       "",
@@ -105,6 +105,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Status:      1,
 		Type:        "test_item_type",
 		Txt:         "This is a test text configuration.",
+		Attribute:   map[string]interface{}{"CPU": 5},
 	}
 	result, err = client.PutItem(item_1)
 	checkResult(result, err, "create item_1 failed", t)
@@ -115,6 +116,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Description: "Test Item 2",
 		Status:      2,
 		Type:        "test_item_type",
+		Attribute:   map[string]interface{}{"CPU": 2},
 	}
 	result, err = client.PutItem(item_2)
 	checkResult(result, err, "create item_2 failed", t)
