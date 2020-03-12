@@ -57,7 +57,7 @@ type OAuthTokenResponse struct {
 }
 
 // creates a new Basic Authentication Token
-func (c *Client) newBasicToken(user string, pwd string) string {
+func (c *Client) NewBasicToken(user string, pwd string) string {
 	return fmt.Sprintf("Basic %s",
 		base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", user, pwd))))
 }
@@ -84,7 +84,7 @@ func (c *Client) GetBearerToken(tokenURI string, clientId string, secret string,
 
 	// adds the relevant http headers
 	req.Header.Add("accept", "application/json")                        // need a response in json format
-	req.Header.Add("authorization", c.newBasicToken(clientId, secret))  // authenticates with c id and secret
+	req.Header.Add("authorization", c.NewBasicToken(clientId, secret))  // authenticates with c id and secret
 	req.Header.Add("cache-control", "no-cache")                         // forces caches to submit the request to the origin server for validation before releasing a cached copy
 	req.Header.Add("content-type", "application/x-www-form-urlencoded") // posting an http form
 
