@@ -22,6 +22,15 @@ import (
 	"net/http"
 )
 
+type ItemTypeAttributeList struct {
+	Values []ItemTypeAttribute
+}
+
+func (list *ItemTypeAttributeList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 type ItemTypeAttribute struct {
 	Id          string `json:"id"`
 	Key         string `json:"key"`

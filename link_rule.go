@@ -22,6 +22,15 @@ import (
 	"net/http"
 )
 
+type LinkRuleList struct {
+	Values []LinkRule
+}
+
+func (list *LinkRuleList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 type LinkRule struct {
 	Id               string `json:"id"`
 	Key              string `json:"key"`

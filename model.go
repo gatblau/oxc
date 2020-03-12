@@ -23,6 +23,15 @@ import (
 	"net/http"
 )
 
+type ModelList struct {
+	Values []Model
+}
+
+func (list *ModelList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 // the Model resource
 type Model struct {
 	Id          string `json:"id"`

@@ -23,6 +23,15 @@ import (
 	"net/http"
 )
 
+type RoleList struct {
+	Values []Role
+}
+
+func (list *RoleList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 // the Role resource
 type Role struct {
 	Id          string `json:"id"`

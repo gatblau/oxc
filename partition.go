@@ -23,6 +23,15 @@ import (
 	"net/http"
 )
 
+type PartitionList struct {
+	Values []Partition
+}
+
+func (list *PartitionList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 // the Partition resource
 type Partition struct {
 	Id          string `json:"id"`

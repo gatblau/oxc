@@ -22,6 +22,15 @@ import (
 	"net/http"
 )
 
+type LinkTypeAttributeList struct {
+	Values []LinkTypeAttribute
+}
+
+func (list *LinkTypeAttributeList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 type LinkTypeAttribute struct {
 	Id          string `json:"id"`
 	Key         string `json:"key"`

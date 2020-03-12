@@ -150,4 +150,57 @@ func TestOnixClient_Put(t *testing.T) {
 	}
 	result, err = client.PutLink(link)
 	checkResult(result, err, "create link_1 failed", t)
+
+	data := getData()
+	result, err = client.PutData(data)
+	if err != nil {
+		t.Error(err)
+	}
+	if result.Error {
+		t.Error(result.Message)
+	}
+}
+
+func getData() *GraphData {
+	return &GraphData{
+		Models: []Model{
+			Model{
+				Key:         "TERRAFORM",
+				Name:        "Terraform Model",
+				Description: "Defines the item and link types that describe Terraform resources.",
+			},
+		},
+		ItemTypes: []ItemType{
+			ItemType{
+				Key:         "TF_STATE",
+				Name:        "Terraform State",
+				Description: "State about a group of managed infrastructure and configuration resources. This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.",
+				Model:       "TERRAFORM",
+			},
+			ItemType{
+				Key:         "TF_RESOURCE",
+				Name:        "Terraform Resource",
+				Description: "Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records.",
+				Model:       "TERRAFORM",
+			},
+		},
+		LinkTypes: []LinkType{
+			LinkType{
+				Key:         "TF_STATE_LINK",
+				Name:        "Terraform State Link Type",
+				Description: "Links Terraform resources that are part of a state.",
+				Model:       "TERRAFORM",
+			},
+		},
+		LinkRules: []LinkRule{
+			LinkRule{
+				Key:              fmt.Sprintf("%s->%s", "TF_STATE", "TF_RESOURCE"),
+				Name:             "Terraform State to Resource Rule",
+				Description:      "Allow the linking of a Terraform State item to one or more Terraform Resource items using Terraform State Links.",
+				LinkTypeKey:      "TF_STATE_LINK",
+				StartItemTypeKey: "TF_STATE",
+				EndItemTypeKey:   "TF_RESOURCE",
+			},
+		},
+	}
 }

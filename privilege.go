@@ -23,6 +23,15 @@ import (
 	"net/http"
 )
 
+type PrivilegeList struct {
+	Values []Privilege
+}
+
+func (list *PrivilegeList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 // the Privilege resource
 type Privilege struct {
 	Id        string `json:"id"`

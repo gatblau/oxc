@@ -22,6 +22,15 @@ import (
 	"net/http"
 )
 
+type ItemTypeList struct {
+	Values []ItemType
+}
+
+func (list *ItemTypeList) json() (*bytes.Reader, error) {
+	jsonBytes, err := json.Marshal(list)
+	return bytes.NewReader(jsonBytes), err
+}
+
 // the Item Type resource
 type ItemType struct {
 	Id           string                 `json:"id"`
