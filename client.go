@@ -148,7 +148,7 @@ func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Res
 	// check for response status
 	if response.StatusCode >= 300 {
 		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
-		return nil, err
+		return &Result{Message: err.Error(), Error: true}, err
 	}
 
 	// decodes the response
