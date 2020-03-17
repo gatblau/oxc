@@ -145,18 +145,17 @@ func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Res
 		return &Result{Message: err.Error(), Error: true}, err
 	}
 
-	// check for response status
-	if response.StatusCode >= 300 {
-		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
-		return &Result{Message: err.Error(), Error: true}, err
-	}
-
 	// decodes the response
 	result := new(Result)
 	err = json.NewDecoder(response.Body).Decode(result)
 
 	if err != nil {
 		return result, err
+	}
+
+	// check for response status
+	if response.StatusCode >= 300 {
+		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
 	}
 
 	err = response.Body.Close()
