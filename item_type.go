@@ -60,7 +60,7 @@ func (itemType *ItemType) decode(response *http.Response) (*ItemType, error) {
 // get the FQN for the item type resource
 func (itemType *ItemType) uri(baseUrl string) (string, error) {
 	if len(itemType.Key) == 0 {
-		return "", fmt.Errorf("the item does not have a key: cannot construct itemtype resource URI")
+		return "", fmt.Errorf("the item type does not have a key: cannot construct itemtype resource URI")
 	}
 	return fmt.Sprintf("%s/itemtype/%s", baseUrl, itemType.Key), nil
 }

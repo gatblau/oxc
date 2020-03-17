@@ -52,10 +52,10 @@ func (model *Model) decode(response *http.Response) (*Model, error) {
 	return result, err
 }
 
-// get the FQN for the item resource
+// get the FQN for the model resource
 func (model *Model) uri(baseUrl string) (string, error) {
 	if len(model.Key) == 0 {
-		return "", fmt.Errorf("the model does not have a key: cannot construct Item resource URI")
+		return "", fmt.Errorf("the model does not have a key: cannot construct Model resource URI")
 	}
 	return fmt.Sprintf("%s/model/%s", baseUrl, model.Key), nil
 }

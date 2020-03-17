@@ -145,6 +145,12 @@ func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Res
 		return &Result{Message: err.Error(), Error: true}, err
 	}
 
+	// check for response status
+	if response.StatusCode >= 300 {
+		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
+		return nil, err
+	}
+
 	// decodes the response
 	result := new(Result)
 	err = json.NewDecoder(response.Body).Decode(result)
@@ -178,5 +184,15 @@ func (c *Client) get(url string) (*http.Response, error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", c.Token)
 	resp, err := http.DefaultClient.Do(req)
+
+	// do we have a nil response?
+	if resp == nil {
+		return resp, errors.New(fmt.Sprintf("error: response was empty for resource: %s", url))
+	}
+	// check error status codes
+	if resp.StatusCode != 200 {
+		err = errors.New(fmt.Sprintf("error: response returned status: %s", resp.Status))
+	}
+
 	return resp, err
 }

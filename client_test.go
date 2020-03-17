@@ -48,11 +48,12 @@ func init() {
 func checkResult(result *Result, err error, msg string, t *testing.T) {
 	if err != nil {
 		t.Error(msg)
-	}
-	if result.Error {
-		t.Error(fmt.Sprintf("%s: %s", msg, result.Message))
-	} else if result.Operation == "L" {
-		t.Error(fmt.Sprintf("Fail to update - Locked entity: %s", result.Ref))
+	} else if result != nil {
+		if result.Error {
+			t.Error(fmt.Sprintf("%s: %s", msg, result.Message))
+		} else if result.Operation == "L" {
+			t.Error(fmt.Sprintf("Fail to update - Locked entity: %s", result.Ref))
+		}
 	}
 }
 
