@@ -190,7 +190,7 @@ func (c *Client) get(url string) (*http.Response, error) {
 	}
 	// check error status codes
 	if resp.StatusCode != 200 {
-		err = errors.New(fmt.Sprintf("error: response returned status: %s", resp.Status))
+		err = errors.New(fmt.Sprintf("error: response returned status: %s. resource: %s", resp.Status, url))
 	}
 
 	return resp, err
