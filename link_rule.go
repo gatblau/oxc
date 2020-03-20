@@ -42,6 +42,7 @@ type LinkRule struct {
 	Version          int64  `json:"version"`
 	Created          string `json:"created"`
 	Updated          string `json:"updated"`
+	ChangedBy        string `json:"changed_by"`
 }
 
 // get the Link Rule in the http Response

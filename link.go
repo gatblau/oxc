@@ -44,6 +44,7 @@ type Link struct {
 	Version      int64                  `json:"version"`
 	Created      string                 `json:"created"`
 	Updated      string                 `json:"updated"`
+	ChangedBy    string                 `json:"changed_by"`
 }
 
 // get the Link in the http Response

@@ -48,6 +48,7 @@ type Item struct {
 	Created     string                 `json:"created"`
 	Updated     string                 `json:"updated"`
 	EncKeyIx    int64                  `json:"encKeyIx"`
+	ChangedBy   string                 `json:"changed_by"`
 }
 
 // get the Item in the http Response

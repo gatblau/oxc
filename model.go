@@ -43,6 +43,7 @@ type Model struct {
 	Version     int64  `json:"version"`
 	Created     string `json:"created"`
 	Updated     string `json:"updated"`
+	ChangedBy   string `json:"changed_by"`
 }
 
 // get the Model in the http Response
