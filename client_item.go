@@ -57,7 +57,7 @@ func (c *Client) GetItem(item *Item) (*Item, error) {
 		return nil, err
 	}
 
-	// make an http put request to the service
+	// make an http get request to the service
 	result, err := c.get(uri)
 
 	if err != nil {
@@ -73,4 +73,29 @@ func (c *Client) GetItem(item *Item) (*Item, error) {
 	}()
 
 	return i, err
+}
+
+// get a list of items which are linked to the specified item
+func (c *Client) GetItemChildren(item *Item) (*ItemList, error) {
+	uri, err := item.uriItemChildren(c.BaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	// make an http get request to the service
+	result, err := c.get(uri)
+
+	if err != nil {
+		return nil, err
+	}
+
+	list, err := item.decodeList(result)
+
+	defer func() {
+		if ferr := result.Body.Close(); ferr != nil {
+			err = ferr
+		}
+	}()
+
+	return list, err
 }

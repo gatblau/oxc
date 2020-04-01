@@ -58,6 +58,13 @@ func (item *Item) decode(response *http.Response) (*Item, error) {
 	return result, err
 }
 
+// get the ItemList in the http Response
+func (item *Item) decodeList(response *http.Response) (*ItemList, error) {
+	result := new(ItemList)
+	err := json.NewDecoder(response.Body).Decode(result)
+	return result, err
+}
+
 // get the FQN for the item resource
 func (item *Item) uri(baseUrl string) (string, error) {
 	if len(item.Key) == 0 {
@@ -80,4 +87,12 @@ func (item *Item) valid() error {
 		return fmt.Errorf("item name is missing")
 	}
 	return nil
+}
+
+// get the FQN for the item / children resource
+func (item *Item) uriItemChildren(baseUrl string) (string, error) {
+	if len(item.Key) == 0 {
+		return "", fmt.Errorf("the item does not have a key: cannot construct Item/Children resource URI")
+	}
+	return fmt.Sprintf("%s/item/%s/children", baseUrl, item.Key), nil
 }

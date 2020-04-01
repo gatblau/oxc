@@ -160,6 +160,14 @@ func TestOnixClient_Put(t *testing.T) {
 	if result.Error {
 		t.Error(result.Message)
 	}
+
+	list, err := client.GetItemChildren(&Item{Key: "item_1"})
+	if err != nil {
+		t.Error(err)
+	}
+	if len(list.Values) == 0 {
+		t.Error("no value in list")
+	}
 }
 
 func getData() *GraphData {
