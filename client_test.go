@@ -166,7 +166,7 @@ func getData() *GraphData {
 	return &GraphData{
 		Models: []Model{
 			Model{
-				Key:         "TERRAFORM",
+				Key:         "TERRA",
 				Name:        "Terraform Model",
 				Description: "Defines the item and link types that describe Terraform resources.",
 			},
@@ -176,13 +176,39 @@ func getData() *GraphData {
 				Key:         "TF_STATE",
 				Name:        "Terraform State",
 				Description: "State about a group of managed infrastructure and configuration resources. This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.",
-				Model:       "TERRAFORM",
+				Model:       "TERRA",
 			},
 			ItemType{
 				Key:         "TF_RESOURCE",
 				Name:        "Terraform Resource",
 				Description: "Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records.",
-				Model:       "TERRAFORM",
+				Model:       "TERRA",
+			},
+		},
+		ItemTypeAttributes: []ItemTypeAttribute{
+			ItemTypeAttribute{
+				Key:         "TF_ITEM_ATTR_MODE",
+				Name:        "mode",
+				Description: "Whether the resource is a data source or a managed resource.",
+				Type:        "string",
+				ItemTypeKey: "TF_RESOURCE",
+				Required:    true,
+			},
+			ItemTypeAttribute{
+				Key:         "TF_ITEM_ATTR_TYPE",
+				Name:        "type",
+				Description: "The resource type.",
+				Type:        "string",
+				ItemTypeKey: "TF_RESOURCE",
+				Required:    true,
+			},
+			ItemTypeAttribute{
+				Key:         "TF_ITEM_ATTR_PROVIDER",
+				Name:        "provider",
+				Description: "The provider used to manage this resource.",
+				Type:        "string",
+				ItemTypeKey: "TF_RESOURCE",
+				Required:    true,
 			},
 		},
 		LinkTypes: []LinkType{
@@ -190,7 +216,7 @@ func getData() *GraphData {
 				Key:         "TF_STATE_LINK",
 				Name:        "Terraform State Link Type",
 				Description: "Links Terraform resources that are part of a state.",
-				Model:       "TERRAFORM",
+				Model:       "TERRA",
 			},
 		},
 		LinkRules: []LinkRule{
