@@ -16,11 +16,12 @@
 package oxc
 
 import (
+	"bytes"
+	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 )
@@ -31,6 +32,12 @@ const (
 	GET    = "GET"
 	POST   = "POST"
 )
+
+// all entities interface for payload serialisation
+type entity interface {
+	json() (*bytes.Reader, error)
+	bytes() (*[]byte, error)
+}
 
 // Onix HTTP client
 type Client struct {
@@ -120,22 +127,21 @@ func (c *Client) GetBearerToken(tokenURI string, clientId string, secret string,
 }
 
 // Make a generic HTTP request
-func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Result, error) {
-	// creates the request
-	req, err := http.NewRequest(method, url, payload)
-
-	// any errors are returned
+func (c *Client) makeRequest(method string, url string, payload entity) (*Result, error) {
+	// prepares the request body, if no body exists, a nil reader is retrieved
+	reader, err := c.getRequestBody(payload)
 	if err != nil {
 		return &Result{Message: err.Error(), Error: true}, err
 	}
 
-	// requires a response in json format
-	req.Header.Set("Content-Type", "application/json")
-
-	// if an authentication token has been specified then add it to the request header
-	if c.Token != "" && len(c.Token) > 0 {
-		req.Header.Set("Authorization", c.Token)
+	// creates the request
+	req, err := http.NewRequest(method, url, reader)
+	if err != nil {
+		return &Result{Message: err.Error(), Error: true}, err
 	}
+
+	// add the http headers to the request
+	c.addHttpHeaders(req, payload)
 
 	// submits the request
 	response, err := http.DefaultClient.Do(req)
@@ -165,7 +171,7 @@ func (c *Client) makeRequest(method string, url string, payload io.Reader) (*Res
 }
 
 // Make a PUT HTTP request to the WAPI
-func (c *Client) put(url string, payload io.Reader) (*Result, error) {
+func (c *Client) put(url string, payload entity) (*Result, error) {
 	return c.makeRequest(PUT, url, payload)
 }
 
@@ -176,14 +182,15 @@ func (c *Client) delete(url string) (*Result, error) {
 
 // Make a GET HTTP request to the WAPI
 func (c *Client) get(url string) (*http.Response, error) {
+	// create request
 	req, err := http.NewRequest(GET, url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", c.Token)
+	// add http headers
+	c.addHttpHeaders(req, nil)
+	// issue http request
 	resp, err := http.DefaultClient.Do(req)
-
 	// do we have a nil response?
 	if resp == nil {
 		return resp, errors.New(fmt.Sprintf("error: response was empty for resource: %s", url))
@@ -192,6 +199,53 @@ func (c *Client) get(url string) (*http.Response, error) {
 	if resp.StatusCode != 200 {
 		err = errors.New(fmt.Sprintf("error: response returned status: %s. resource: %s", resp.Status, url))
 	}
-
 	return resp, err
+}
+
+// add http headers to the request object
+func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
+	// add authorization header if there is a token defined
+	if len(c.Token) > 0 {
+		req.Header.Set("Authorization", c.Token)
+	}
+	// all content type should be in JSON format
+	req.Header.Set("Content-Type", "application/json")
+	// if there is a payload
+	if payload != nil {
+		// get the bytes in the entity
+		data, err := payload.bytes()
+		if err != nil {
+			return err
+		}
+		// set the length of the payload
+		req.ContentLength = int64(len(*data))
+		// generate checksum of the payload data using the MD5 hashing algorithm
+		checksum := md5.Sum(*data)
+		// base 64 encode the checksum
+		b64checksum := base64.StdEncoding.EncodeToString(checksum[:])
+		// add Content-MD5 header (see https://tools.ietf.org/html/rfc1864)
+		req.Header.Set("Content-MD5", b64checksum)
+	}
+	return nil
+}
+
+func (c *Client) getRequestBody(payload entity) (*bytes.Reader, error) {
+	// if no payload exists
+	if payload == nil {
+		// returns an empty reader
+		return bytes.NewReader([]byte{}), nil
+	}
+	// gets a byte reader to pass to the request body
+	return payload.json()
+}
+
+// convert the passed-in object to a JSON byte slice
+// NOTE: json.Marshal is purposely not used as it will escape any < > characters
+func jsonBytes(object interface{}) ([]byte, error) {
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	// switch off the escaping!
+	encoder.SetEscapeHTML(false)
+	err := encoder.Encode(object)
+	return buffer.Bytes(), err
 }

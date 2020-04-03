@@ -27,12 +27,11 @@ type ItemTypeAttributeList struct {
 }
 
 func (list *ItemTypeAttributeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 type ItemTypeAttribute struct {
-	Id          string `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -45,7 +44,7 @@ type ItemTypeAttribute struct {
 	Version     int64  `json:"version"`
 	Created     string `json:"created"`
 	Updated     string `json:"updated"`
-	ChangedBy   string `json:"changed_by"`
+	ChangedBy   string `json:"changedBy"`
 }
 
 // get the Item Type Attribute in the http Response
@@ -66,10 +65,16 @@ func (typeAttr *ItemTypeAttribute) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/itemtype/%s/attribute/%s", baseUrl, typeAttr.ItemTypeKey, typeAttr.Key), nil
 }
 
-// get a JSON bytes reader for the item
+// get a JSON bytes reader for the entity
 func (typeAttr *ItemTypeAttribute) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(typeAttr)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := typeAttr.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (typeAttr *ItemTypeAttribute) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(typeAttr)
+	return &bytes, err
 }
 
 func (typeAttr *ItemTypeAttribute) valid() error {

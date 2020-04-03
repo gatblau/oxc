@@ -28,13 +28,12 @@ type RoleList struct {
 }
 
 func (list *RoleList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 // the Role resource
 type Role struct {
-	Id          string `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -43,7 +42,7 @@ type Role struct {
 	Version     int64  `json:"version"`
 	Created     string `json:"created"`
 	Updated     string `json:"updated"`
-	ChangedBy   string `json:"changed_by"`
+	ChangedBy   string `json:"changedBy"`
 }
 
 // get the Role in the http Response
@@ -61,10 +60,16 @@ func (role *Role) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/role/%s", baseUrl, role.Key), nil
 }
 
-// get a JSON bytes reader for the item
+// get a JSON bytes reader for the entity
 func (role *Role) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(role)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := role.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (role *Role) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(role)
+	return &bytes, err
 }
 
 func (role *Role) valid() error {

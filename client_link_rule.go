@@ -22,19 +22,13 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 		return nil, err
 	}
 
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := linkRule.json()
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := linkRule.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, linkRule)
 }
 
 // issue a delete http request to the resource URI

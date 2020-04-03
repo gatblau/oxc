@@ -22,14 +22,6 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 		return nil, err
 	}
 
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := typeAttr.json()
-
-	// any errors are returned immediately
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := typeAttr.uri(c.BaseURL)
 
 	if err != nil {
@@ -37,7 +29,7 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, typeAttr)
 }
 
 // issue a delete http request to the resource URI

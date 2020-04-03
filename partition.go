@@ -28,13 +28,12 @@ type PartitionList struct {
 }
 
 func (list *PartitionList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 // the Partition resource
 type Partition struct {
-	Id          string `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -42,7 +41,7 @@ type Partition struct {
 	Version     int64  `json:"version"`
 	Created     string `json:"created"`
 	Updated     string `json:"updated"`
-	ChangedBy   string `json:"changed_by"`
+	ChangedBy   string `json:"changedBy"`
 }
 
 // get the Partition in the http Response
@@ -60,10 +59,16 @@ func (partition *Partition) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/partition/%s", baseUrl, partition.Key), nil
 }
 
-// get a JSON bytes reader for the item
+// get a JSON bytes reader for the entity
 func (partition *Partition) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(partition)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := partition.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (partition *Partition) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(partition)
+	return &bytes, err
 }
 
 func (partition *Partition) valid() error {

@@ -17,19 +17,11 @@ package oxc
 
 // issue a put http request with the GraphData as payload to the resource URI
 func (c *Client) PutData(data *GraphData) (*Result, error) {
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := data.json()
-
-	// any errors are returned immediately
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := data.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, data)
 }

@@ -23,21 +23,13 @@ func (c *Client) PutRole(role *Role) (*Result, error) {
 		return nil, err
 	}
 
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := role.json()
-
-	// any errors are returned immediately
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := role.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, role)
 }
 
 // issue a delete http request to the resource URI

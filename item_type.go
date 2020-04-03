@@ -27,13 +27,12 @@ type ItemTypeList struct {
 }
 
 func (list *ItemTypeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 // the Item Type resource
 type ItemType struct {
-	Id           string                 `json:"id"`
 	Key          string                 `json:"key"`
 	Name         string                 `json:"name"`
 	Description  string                 `json:"description"`
@@ -48,7 +47,7 @@ type ItemType struct {
 	Version      int64                  `json:"version"`
 	Created      string                 `json:"created"`
 	Updated      string                 `json:"updated"`
-	ChangedBy    string                 `json:"changed_by"`
+	ChangedBy    string                 `json:"changedBy"`
 }
 
 // get the Item Type in the http Response
@@ -66,10 +65,16 @@ func (itemType *ItemType) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/itemtype/%s", baseUrl, itemType.Key), nil
 }
 
-// get a JSON bytes reader for the itemtype
+// get a JSON bytes reader for the entity
 func (itemType *ItemType) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(itemType)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := itemType.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (itemType *ItemType) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(itemType)
+	return &bytes, err
 }
 
 func (itemType *ItemType) valid() error {

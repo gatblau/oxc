@@ -28,13 +28,12 @@ type ModelList struct {
 }
 
 func (list *ModelList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 // the Model resource
 type Model struct {
-	Id          string `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -43,7 +42,7 @@ type Model struct {
 	Version     int64  `json:"version"`
 	Created     string `json:"created"`
 	Updated     string `json:"updated"`
-	ChangedBy   string `json:"changed_by"`
+	ChangedBy   string `json:"changedBy"`
 }
 
 // get the Model in the http Response
@@ -61,10 +60,16 @@ func (model *Model) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/model/%s", baseUrl, model.Key), nil
 }
 
-// get a JSON bytes reader for the item
+// get a JSON bytes reader for the entity
 func (model *Model) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(model)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := model.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (model *Model) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(model)
+	return &bytes, err
 }
 
 func (model *Model) valid() error {

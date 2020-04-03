@@ -27,12 +27,11 @@ type LinkRuleList struct {
 }
 
 func (list *LinkRuleList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 type LinkRule struct {
-	Id               string `json:"id"`
 	Key              string `json:"key"`
 	Name             string `json:"name"`
 	Description      string `json:"description"`
@@ -42,7 +41,7 @@ type LinkRule struct {
 	Version          int64  `json:"version"`
 	Created          string `json:"created"`
 	Updated          string `json:"updated"`
-	ChangedBy        string `json:"changed_by"`
+	ChangedBy        string `json:"changedBy"`
 }
 
 // get the Link Rule in the http Response
@@ -60,10 +59,16 @@ func (rule *LinkRule) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/linkrule/%s", baseUrl, rule.Key), nil
 }
 
-// get a JSON bytes reader for the linkrule
+// get a JSON bytes reader for the entity
 func (rule *LinkRule) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(rule)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := rule.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (rule *LinkRule) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(rule)
+	return &bytes, err
 }
 
 func (rule *LinkRule) valid() error {

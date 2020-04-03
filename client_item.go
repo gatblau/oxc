@@ -22,21 +22,13 @@ func (c *Client) PutItem(item *Item) (*Result, error) {
 		return nil, err
 	}
 
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := item.json()
-
-	// any errors are returned immediately
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := item.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, item)
 }
 
 // issue a delete http request to the resource URI

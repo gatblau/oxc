@@ -23,21 +23,13 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 		return nil, err
 	}
 
-	// converts the passed-in payload to a bytes Reader
-	bytes, err := partition.json()
-
-	// any errors are returned immediately
-	if err != nil {
-		return nil, err
-	}
-
 	uri, err := partition.uri(c.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// make an http put request to the service
-	return c.put(uri, bytes)
+	return c.put(uri, partition)
 }
 
 // issue a delete http request to the resource URI

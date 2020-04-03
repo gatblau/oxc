@@ -28,13 +28,12 @@ type PrivilegeList struct {
 }
 
 func (list *PrivilegeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 // the Privilege resource
 type Privilege struct {
-	Id        string `json:"id"`
 	Key       string `json:"key"`
 	Role      string `json:"roleKey"`
 	Partition string `json:"partitionKey"`
@@ -44,7 +43,7 @@ type Privilege struct {
 	Version   int64  `json:"version"`
 	Created   string `json:"created"`
 	Updated   string `json:"updated"`
-	ChangedBy string `json:"changed_by"`
+	ChangedBy string `json:"changedBy"`
 }
 
 // get the Privilege in the http Response
@@ -62,10 +61,16 @@ func (privilege *Privilege) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/privilege/%s", baseUrl, privilege.Key), nil
 }
 
-// get a JSON bytes reader for the privilege
+// get a JSON bytes reader for the entity
 func (privilege *Privilege) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(privilege)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := privilege.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (privilege *Privilege) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(privilege)
+	return &bytes, err
 }
 
 func (privilege *Privilege) valid() error {

@@ -27,12 +27,11 @@ type LinkList struct {
 }
 
 func (list *LinkList) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(list)
+	jsonBytes, err := jsonBytes(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
 type Link struct {
-	Id           string                 `json:"id"`
 	Key          string                 `json:"key"`
 	Description  string                 `json:"description"`
 	Type         string                 `json:"type"`
@@ -44,7 +43,7 @@ type Link struct {
 	Version      int64                  `json:"version"`
 	Created      string                 `json:"created"`
 	Updated      string                 `json:"updated"`
-	ChangedBy    string                 `json:"changed_by"`
+	ChangedBy    string                 `json:"changedBy"`
 }
 
 // get the Link in the http Response
@@ -62,10 +61,16 @@ func (link *Link) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/link/%s", baseUrl, link.Key), nil
 }
 
-// get a JSON bytes reader for the link
+// get a JSON bytes reader for the entity
 func (link *Link) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(link)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := link.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (link *Link) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(link)
+	return &bytes, err
 }
 
 func (link *Link) valid() error {

@@ -45,8 +45,14 @@ func (data *GraphData) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/data", baseUrl), nil
 }
 
-// get a JSON bytes reader for the graph data
+// get a JSON bytes reader for the entity
 func (data *GraphData) json() (*bytes.Reader, error) {
-	jsonBytes, err := json.Marshal(data)
-	return bytes.NewReader(jsonBytes), err
+	jsonBytes, err := data.bytes()
+	return bytes.NewReader(*jsonBytes), err
+}
+
+// get a []byte representing the entity
+func (data *GraphData) bytes() (*[]byte, error) {
+	bytes, err := jsonBytes(data)
+	return &bytes, err
 }
