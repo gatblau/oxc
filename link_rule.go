@@ -45,7 +45,7 @@ type LinkRule struct {
 }
 
 // get the Link Rule in the http Response
-func (linkRule *LinkRule) decode(response *http.Response) (*LinkRule, error) {
+func (rule *LinkRule) decode(response *http.Response) (*LinkRule, error) {
 	result := new(LinkRule)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
@@ -62,13 +62,16 @@ func (rule *LinkRule) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (rule *LinkRule) json() (*bytes.Reader, error) {
 	jsonBytes, err := rule.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (rule *LinkRule) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(rule)
-	return &bytes, err
+	b, err := jsonBytes(rule)
+	return &b, err
 }
 
 func (rule *LinkRule) valid() error {

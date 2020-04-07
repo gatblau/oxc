@@ -23,7 +23,7 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := partition.uri(c.BaseURL)
+	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeletePartition(partition *Partition) (*Result, error) {
-	uri, err := partition.uri(c.BaseURL)
+	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *Client) DeletePartition(partition *Partition) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetPartition(partition *Partition) (*Partition, error) {
-	uri, err := partition.uri(c.BaseURL)
+	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

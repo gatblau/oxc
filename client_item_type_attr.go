@@ -22,7 +22,7 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (c *Client) DeleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error
 
 // issue a get http request to the resource URI
 func (c *Client) GetItemTypeAttr(typeAttr *ItemTypeAttribute) (*ItemTypeAttribute, error) {
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 
 	if err != nil {
 		return nil, err

@@ -18,12 +18,12 @@ package oxc
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
 const (
@@ -41,8 +41,9 @@ type entity interface {
 
 // Onix HTTP client
 type Client struct {
-	BaseURL string
-	Token   string
+	conf  *ClientConf
+	self  *http.Client
+	token string
 }
 
 // Result data retrieved by PUT and DELETE WAPI resources
@@ -63,67 +64,36 @@ type OAuthTokenResponse struct {
 	IdToken     string `json:"id_token"`
 }
 
-// creates a new Basic Authentication Token
-func (c *Client) NewBasicToken(user string, pwd string) string {
-	return fmt.Sprintf("Basic %s",
-		base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", user, pwd))))
-}
-
-// Set up the authentication token used by the client
-func (c *Client) SetAuthToken(token string) {
-	c.Token = token
-}
-
-// Gets an OAuth Bearer token
-func (c *Client) GetBearerToken(tokenURI string, clientId string, secret string, user string, pwd string) (string, error) {
-	// constructs a payload for the form POST to the authorisation server token URI
-	// passing the type of grant,the username, password and scopes
-	payload := strings.NewReader(
-		fmt.Sprintf("grant_type=password&username=%s&password=%s&scope=openid%%20onix", user, pwd))
-
-	// creates the http request
-	req, err := http.NewRequest(POST, tokenURI, payload)
-
-	// if any errors then return
+// creates a new Onix Web API client
+func NewClient(conf *ClientConf) (*Client, error) {
+	// checks the passed-in configuration is correct
+	err := checkConf(conf)
 	if err != nil {
-		return "", errors.New("Failed to create request: " + err.Error())
+		return nil, err
 	}
 
-	// adds the relevant http headers
-	req.Header.Add("accept", "application/json")                        // need a response in json format
-	req.Header.Add("authorization", c.NewBasicToken(clientId, secret))  // authenticates with c id and secret
-	req.Header.Add("cache-control", "no-cache")                         // forces caches to submit the request to the origin server for validation before releasing a cached copy
-	req.Header.Add("content-type", "application/x-www-form-urlencoded") // posting an http form
-
-	// submits the request to the authorisation server
-	response, err := http.DefaultClient.Do(req)
-
-	// if any errors then return
+	// obtains an authentication token for the client
+	token, err := conf.getAuthToken()
 	if err != nil {
-		return "", errors.New("Failed when submitting request: " + err.Error())
-	}
-	if response.StatusCode != 200 {
-		return "", errors.New("Failed to obtain access token: " + response.Status + " Hint: the c might be unauthorised.")
+		return nil, err
 	}
 
-	defer func() {
-		if ferr := response.Body.Close(); ferr != nil {
-			err = ferr
-		}
-	}()
-
-	result := new(OAuthTokenResponse)
-
-	// decodes the response
-	err = json.NewDecoder(response.Body).Decode(result)
-
-	// if any errors then return
-	if err != nil {
-		return "", err
+	// gets an instance of the client
+	client := &Client{
+		// the configuration information
+		conf: conf,
+		// the authentication token
+		token: token,
+		// the http client instance
+		self: &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: conf.InsecureSkipVerify,
+				},
+			},
+		},
 	}
-
-	// constructs and returns a bearer token
-	return fmt.Sprintf("Bearer %s", result.AccessToken), nil
+	return client, err
 }
 
 // Make a generic HTTP request
@@ -141,7 +111,10 @@ func (c *Client) makeRequest(method string, url string, payload entity) (*Result
 	}
 
 	// add the http headers to the request
-	c.addHttpHeaders(req, payload)
+	err = c.addHttpHeaders(req, payload)
+	if err != nil {
+		return &Result{Message: err.Error(), Error: true}, err
+	}
 
 	// submits the request
 	response, err := http.DefaultClient.Do(req)
@@ -188,7 +161,10 @@ func (c *Client) get(url string) (*http.Response, error) {
 		return nil, err
 	}
 	// add http headers
-	c.addHttpHeaders(req, nil)
+	err = c.addHttpHeaders(req, nil)
+	if err != nil {
+		return nil, err
+	}
 	// issue http request
 	resp, err := http.DefaultClient.Do(req)
 	// do we have a nil response?
@@ -205,8 +181,8 @@ func (c *Client) get(url string) (*http.Response, error) {
 // add http headers to the request object
 func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
 	// add authorization header if there is a token defined
-	if len(c.Token) > 0 {
-		req.Header.Set("Authorization", c.Token)
+	if len(c.token) > 0 {
+		req.Header.Set("Authorization", c.token)
 	}
 	// all content type should be in JSON format
 	req.Header.Set("Content-Type", "application/json")

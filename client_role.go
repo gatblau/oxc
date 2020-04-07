@@ -23,7 +23,7 @@ func (c *Client) PutRole(role *Role) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := role.uri(c.BaseURL)
+	uri, err := role.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (c *Client) PutRole(role *Role) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteRole(role *Role) (*Result, error) {
-	uri, err := role.uri(c.BaseURL)
+	uri, err := role.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *Client) DeleteRole(role *Role) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetRole(role *Role) (*Role, error) {
-	uri, err := role.uri(c.BaseURL)
+	uri, err := role.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

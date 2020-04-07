@@ -23,7 +23,7 @@ func (c *Client) PutModel(model *Model) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := model.uri(c.BaseURL)
+	uri, err := model.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (c *Client) PutModel(model *Model) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteModel(model *Model) (*Result, error) {
-	uri, err := model.uri(c.BaseURL)
+	uri, err := model.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *Client) DeleteModel(model *Model) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetModel(model *Model) (*Model, error) {
-	uri, err := model.uri(c.BaseURL)
+	uri, err := model.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

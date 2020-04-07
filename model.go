@@ -63,13 +63,16 @@ func (model *Model) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (model *Model) json() (*bytes.Reader, error) {
 	jsonBytes, err := model.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (model *Model) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(model)
-	return &bytes, err
+	b, err := jsonBytes(model)
+	return &b, err
 }
 
 func (model *Model) valid() error {

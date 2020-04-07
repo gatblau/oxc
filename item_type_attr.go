@@ -68,13 +68,16 @@ func (typeAttr *ItemTypeAttribute) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (typeAttr *ItemTypeAttribute) json() (*bytes.Reader, error) {
 	jsonBytes, err := typeAttr.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (typeAttr *ItemTypeAttribute) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(typeAttr)
-	return &bytes, err
+	b, err := jsonBytes(typeAttr)
+	return &b, err
 }
 
 func (typeAttr *ItemTypeAttribute) valid() error {

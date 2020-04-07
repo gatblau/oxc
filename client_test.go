@@ -20,29 +20,28 @@ import (
 	"testing"
 )
 
-var client Client
+// initialises the Web API client
+var client = createClient()
 
-func init() {
-	client = Client{BaseURL: "http://localhost:8080"}
-
-	// test using a basic authentication token
-	t := client.NewBasicToken("admin", "0n1x")
-
-	// uncomment below & reset configuration vars
-	// to test using using an OAuth bearer token
-
-	//t, err := client.getBearerToken(
-	//	"https://dev-447786.okta.com/oauth2/default/v1/token",
-	//	"0oalyh...356",
-	//	"Tsed........OP0oEf9H7",
-	//	"user@email.com",
-	//	"user_pwd_xxxxx")
-	//
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	client.SetAuthToken(t)
+// create an instance of the client
+func createClient() *Client {
+	client, err := NewClient(&ClientConf{
+		BaseURI:            "http://localhost:8080",
+		InsecureSkipVerify: true,
+		AuthMode:           Basic,
+		Username:           "admin",
+		Password:           "0n1x",
+		// uncomment below & reset configuration vars
+		// to test using an OAuth bearer token
+		// AuthMode:           	OIDC,
+		// TokenURI:     		"https://dev-447786.okta.com/oauth2/default/v1/token",
+		// ClientId:			"0oalyh...356",
+		// AppSecret:			"Tsed........OP0oEf9H7",
+	})
+	if err != nil {
+		panic(err)
+	}
+	return client
 }
 
 func checkResult(result *Result, err error, msg string, t *testing.T) {
@@ -99,7 +98,7 @@ func TestOnixClient_Put(t *testing.T) {
 	result, err = client.PutItemTypeAttr(itemTypeAttr)
 	checkResult(result, err, "create test_item_type_attr_1 failed", t)
 
-	item_1 := &Item{
+	item1 := &Item{
 		Key:         "item_1",
 		Name:        "Item 1",
 		Description: "Test Item 1",
@@ -108,10 +107,10 @@ func TestOnixClient_Put(t *testing.T) {
 		Txt:         "This is a test text configuration.",
 		Attribute:   map[string]interface{}{"CPU": 5},
 	}
-	result, err = client.PutItem(item_1)
+	result, err = client.PutItem(item1)
 	checkResult(result, err, "create item_1 failed", t)
 
-	item_2 := &Item{
+	item2 := &Item{
 		Key:         "item_2",
 		Name:        "Item 2",
 		Description: "Test Item 2",
@@ -119,19 +118,19 @@ func TestOnixClient_Put(t *testing.T) {
 		Type:        "test_item_type",
 		Attribute:   map[string]interface{}{"CPU": 2},
 	}
-	result, err = client.PutItem(item_2)
+	result, err = client.PutItem(item2)
 	checkResult(result, err, "create item_2 failed", t)
 
-	link_type := &LinkType{
+	linkType := &LinkType{
 		Key:         "test_link_type",
 		Name:        "Test Link Type",
 		Description: "Test Link Type",
 		Model:       "test_model",
 	}
-	result, err = client.PutLinkType(link_type)
+	result, err = client.PutLinkType(linkType)
 	checkResult(result, err, "create test_link_type failed", t)
 
-	link_rule := &LinkRule{
+	linkRule := &LinkRule{
 		Key:              "test_link_rule_1",
 		Name:             "Test Item Type to Test Item Type rule",
 		Description:      "Allow to connect two items of type test_item_type.",
@@ -139,7 +138,7 @@ func TestOnixClient_Put(t *testing.T) {
 		StartItemTypeKey: "test_item_type",
 		EndItemTypeKey:   "test_item_type",
 	}
-	result, err = client.PutLinkRule(link_rule)
+	result, err = client.PutLinkRule(linkRule)
 	checkResult(result, err, "create test_item_type->test_item_type rule failed", t)
 
 	link := &Link{

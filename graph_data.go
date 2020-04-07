@@ -48,11 +48,14 @@ func (data *GraphData) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (data *GraphData) json() (*bytes.Reader, error) {
 	jsonBytes, err := data.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (data *GraphData) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(data)
-	return &bytes, err
+	b, err := jsonBytes(data)
+	return &b, err
 }

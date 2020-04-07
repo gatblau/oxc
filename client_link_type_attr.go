@@ -22,7 +22,7 @@ func (c *Client) PutLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (c *Client) PutLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error) {
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (c *Client) DeleteLinkTypeAttr(typeAttr *LinkTypeAttribute) (*Result, error
 
 // issue a get http request to the resource URI
 func (c *Client) GetLinkTypeAttr(typeAttr *LinkTypeAttribute) (*LinkTypeAttribute, error) {
-	uri, err := typeAttr.uri(c.BaseURL)
+	uri, err := typeAttr.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

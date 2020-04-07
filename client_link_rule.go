@@ -22,7 +22,7 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := linkRule.uri(c.BaseURL)
+	uri, err := linkRule.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
-	uri, err := linkRule.uri(c.BaseURL)
+	uri, err := linkRule.uri(c.conf.BaseURI)
 
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetLinkRule(linkRule *LinkRule) (*LinkRule, error) {
-	uri, err := linkRule.uri(c.BaseURL)
+	uri, err := linkRule.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

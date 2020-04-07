@@ -23,7 +23,7 @@ func (c *Client) PutPrivilege(privilege *Privilege) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := privilege.uri(c.BaseURL)
+	uri, err := privilege.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (c *Client) PutPrivilege(privilege *Privilege) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeletePrivilege(privilege *Privilege) (*Result, error) {
-	uri, err := privilege.uri(c.BaseURL)
+	uri, err := privilege.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *Client) DeletePrivilege(privilege *Privilege) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetPrivilege(privilege *Privilege) (*Privilege, error) {
-	uri, err := privilege.uri(c.BaseURL)
+	uri, err := privilege.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

@@ -22,7 +22,7 @@ func (c *Client) PutLink(link *Link) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := link.uri(c.BaseURL)
+	uri, err := link.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (c *Client) PutLink(link *Link) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteLink(link *Link) (*Result, error) {
-	uri, err := link.uri(c.BaseURL)
+	uri, err := link.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (c *Client) DeleteLink(link *Link) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetLink(link *Link) (*Link, error) {
-	uri, err := link.uri(c.BaseURL)
+	uri, err := link.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

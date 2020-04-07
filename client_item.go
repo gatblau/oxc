@@ -22,7 +22,7 @@ func (c *Client) PutItem(item *Item) (*Result, error) {
 		return nil, err
 	}
 
-	uri, err := item.uri(c.BaseURL)
+	uri, err := item.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (c *Client) PutItem(item *Item) (*Result, error) {
 
 // issue a delete http request to the resource URI
 func (c *Client) DeleteItem(item *Item) (*Result, error) {
-	uri, err := item.uri(c.BaseURL)
+	uri, err := item.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (c *Client) DeleteItem(item *Item) (*Result, error) {
 
 // issue a get http request to the resource URI
 func (c *Client) GetItem(item *Item) (*Item, error) {
-	uri, err := item.uri(c.BaseURL)
+	uri, err := item.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (c *Client) GetItem(item *Item) (*Item, error) {
 
 // get a list of items which are linked to the specified item
 func (c *Client) GetItemChildren(item *Item) (*ItemList, error) {
-	uri, err := item.uriItemChildren(c.BaseURL)
+	uri, err := item.uriItemChildren(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}

@@ -63,13 +63,16 @@ func (role *Role) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (role *Role) json() (*bytes.Reader, error) {
 	jsonBytes, err := role.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (role *Role) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(role)
-	return &bytes, err
+	b, err := jsonBytes(role)
+	return &b, err
 }
 
 func (role *Role) valid() error {

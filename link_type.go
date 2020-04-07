@@ -65,13 +65,16 @@ func (linkType *LinkType) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (linkType *LinkType) json() (*bytes.Reader, error) {
 	jsonBytes, err := linkType.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (linkType *LinkType) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(linkType)
-	return &bytes, err
+	b, err := jsonBytes(linkType)
+	return &b, err
 }
 
 func (linkType *LinkType) valid() error {

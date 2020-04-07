@@ -64,13 +64,16 @@ func (privilege *Privilege) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (privilege *Privilege) json() (*bytes.Reader, error) {
 	jsonBytes, err := privilege.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (privilege *Privilege) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(privilege)
-	return &bytes, err
+	b, err := jsonBytes(privilege)
+	return &b, err
 }
 
 func (privilege *Privilege) valid() error {

@@ -68,13 +68,16 @@ func (itemType *ItemType) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (itemType *ItemType) json() (*bytes.Reader, error) {
 	jsonBytes, err := itemType.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (itemType *ItemType) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(itemType)
-	return &bytes, err
+	b, err := jsonBytes(itemType)
+	return &b, err
 }
 
 func (itemType *ItemType) valid() error {

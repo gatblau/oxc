@@ -62,13 +62,16 @@ func (partition *Partition) uri(baseUrl string) (string, error) {
 // get a JSON bytes reader for the entity
 func (partition *Partition) json() (*bytes.Reader, error) {
 	jsonBytes, err := partition.bytes()
+	if err != nil {
+		return nil, err
+	}
 	return bytes.NewReader(*jsonBytes), err
 }
 
 // get a []byte representing the entity
 func (partition *Partition) bytes() (*[]byte, error) {
-	bytes, err := jsonBytes(partition)
-	return &bytes, err
+	b, err := jsonBytes(partition)
+	return &b, err
 }
 
 func (partition *Partition) valid() error {

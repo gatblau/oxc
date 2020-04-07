@@ -17,7 +17,7 @@ package oxc
 
 // issue a put http request with the GraphData as payload to the resource URI
 func (c *Client) PutData(data *GraphData) (*Result, error) {
-	uri, err := data.uri(c.BaseURL)
+	uri, err := data.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
