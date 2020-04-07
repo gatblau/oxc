@@ -21,7 +21,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/labstack/gommon/log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
 )
@@ -60,6 +60,21 @@ type ClientConf struct {
 	AppSecret string
 }
 
+// sets the AuthMode from a passed-in string
+func (cfg *ClientConf) SetAuthMode(authMode string) {
+	switch strings.ToLower(authMode) {
+	case "none":
+		cfg.AuthMode = None
+	case "basic":
+		cfg.AuthMode = Basic
+	case "oidc":
+		cfg.AuthMode = OIDC
+	default:
+		log.Warn().Msgf("authMode value '%s' not recognised, defaulting to 'basic' authentication", authMode)
+		cfg.AuthMode = Basic
+	}
+}
+
 // gets the authentication token based on the authentication mode selected
 func (cfg *ClientConf) getAuthToken() (string, error) {
 	switch cfg.AuthMode {
@@ -71,7 +86,7 @@ func (cfg *ClientConf) getAuthToken() (string, error) {
 	case None:
 		return "", nil
 	default:
-		log.Warn("no authentication mode identified, defaulting to none")
+		log.Warn().Msg("no authentication mode identified, defaulting to none")
 		return "", nil
 	}
 }

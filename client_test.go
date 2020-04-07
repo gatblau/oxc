@@ -172,20 +172,20 @@ func TestOnixClient_Put(t *testing.T) {
 func getData() *GraphData {
 	return &GraphData{
 		Models: []Model{
-			Model{
+			{
 				Key:         "TERRA",
 				Name:        "Terraform Model",
 				Description: "Defines the item and link types that describe Terraform resources.",
 			},
 		},
 		ItemTypes: []ItemType{
-			ItemType{
+			{
 				Key:         "TF_STATE",
 				Name:        "Terraform State",
 				Description: "State about a group of managed infrastructure and configuration resources. This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.",
 				Model:       "TERRA",
 			},
-			ItemType{
+			{
 				Key:         "TF_RESOURCE",
 				Name:        "Terraform Resource",
 				Description: "Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records.",
@@ -193,7 +193,7 @@ func getData() *GraphData {
 			},
 		},
 		ItemTypeAttributes: []ItemTypeAttribute{
-			ItemTypeAttribute{
+			{
 				Key:         "TF_ITEM_ATTR_MODE",
 				Name:        "mode",
 				Description: "Whether the resource is a data source or a managed resource.",
@@ -201,7 +201,7 @@ func getData() *GraphData {
 				ItemTypeKey: "TF_RESOURCE",
 				Required:    true,
 			},
-			ItemTypeAttribute{
+			{
 				Key:         "TF_ITEM_ATTR_TYPE",
 				Name:        "type",
 				Description: "The resource type.",
@@ -209,7 +209,7 @@ func getData() *GraphData {
 				ItemTypeKey: "TF_RESOURCE",
 				Required:    true,
 			},
-			ItemTypeAttribute{
+			{
 				Key:         "TF_ITEM_ATTR_PROVIDER",
 				Name:        "provider",
 				Description: "The provider used to manage this resource.",
@@ -219,7 +219,7 @@ func getData() *GraphData {
 			},
 		},
 		LinkTypes: []LinkType{
-			LinkType{
+			{
 				Key:         "TF_STATE_LINK",
 				Name:        "Terraform State Link Type",
 				Description: "Links Terraform resources that are part of a state.",
@@ -227,7 +227,7 @@ func getData() *GraphData {
 			},
 		},
 		LinkRules: []LinkRule{
-			LinkRule{
+			{
 				Key:              fmt.Sprintf("%s->%s", "TF_STATE", "TF_RESOURCE"),
 				Name:             "Terraform State to Resource Rule",
 				Description:      "Allow the linking of a Terraform State item to one or more Terraform Resource items using Terraform State Links.",

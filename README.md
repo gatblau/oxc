@@ -13,8 +13,26 @@ package main
 import "github.com/gatblau/oxc"
 
 func main() {
+    // prepares the client configuration
+    cfg := &oxc.ClientConf{
+         BaseURI:            "http://localhost:8080",
+         InsecureSkipVerify: true,
+         AuthMode:           oxc.Basic,
+         Username:           "admin",
+         Password:           "0n1x",
+         // uncomment below & reset configuration vars
+         // to test using an OAuth bearer token
+         // AuthMode:           	OIDC,
+         // TokenURI:     		"https://dev-447786.okta.com/oauth2/default/v1/token",
+         // ClientId:			"0oalyh...356",
+         // AppSecret:			"Tsed........OP0oEf9H7",
+    }
     // create an instance of the web api client
-    client := createClient()
+    client, err := oxc.NewClient(cfg)
+
+    if err != nil {
+       panic(err)
+    }
 
     // create a new model
     model := &oxc.Model {
