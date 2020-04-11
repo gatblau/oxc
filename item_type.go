@@ -31,6 +31,14 @@ func (list *ItemTypeList) json() (*bytes.Reader, error) {
 	return bytes.NewReader(jsonBytes), err
 }
 
+type ChangeNotifyType string
+
+const (
+	NotifyTypeNone ChangeNotifyType = "N"
+	NotifyTypeType ChangeNotifyType = "T"
+	NotifyTypeItem ChangeNotifyType = "I"
+)
+
 // the Item Type resource
 type ItemType struct {
 	Key          string                 `json:"key"`
@@ -39,11 +47,11 @@ type ItemType struct {
 	Filter       map[string]interface{} `json:"filter"`
 	MetaSchema   map[string]interface{} `json:"metaSchema"`
 	Model        string                 `json:"modelKey"`
-	NotifyChange bool                   `json:"notifyChange"`
+	NotifyChange ChangeNotifyType       `json:"notifyChange"`
 	Tag          []interface{}          `json:"tag"`
 	EncryptMeta  bool                   `json:"encryptMeta"`
 	EncryptTxt   bool                   `json:"encryptTxt"`
-	Managed      bool                   `json:"managed"`
+	Style        map[string]interface{} `json:"style"`
 	Version      int64                  `json:"version"`
 	Created      string                 `json:"created"`
 	Updated      string                 `json:"updated"`

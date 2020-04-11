@@ -40,7 +40,7 @@ type LinkType struct {
 	Tag         []interface{}          `json:"tag"`
 	EncryptMeta bool                   `json:"encryptMeta"`
 	EncryptTxt  bool                   `json:"encryptTxt"`
-	Managed     bool                   `json:"managed"`
+	Style       map[string]interface{} `json:"style"`
 	Version     int64                  `json:"version"`
 	Created     string                 `json:"created"`
 	Updated     string                 `json:"updated"`

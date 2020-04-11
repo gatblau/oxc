@@ -37,7 +37,6 @@ type ItemTypeAttribute struct {
 	Description string `json:"description"`
 	Type        string `json:"type"`
 	DefValue    string `json:"defValue"`
-	Managed     bool   `json:"managed"`
 	Required    bool   `json:"required"`
 	Regex       string `json:"regex"`
 	ItemTypeKey string `json:"itemTypeKey"`

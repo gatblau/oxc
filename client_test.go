@@ -77,8 +77,8 @@ func TestOnixClient_Put(t *testing.T) {
 		Model:        "test_model",
 		EncryptMeta:  false,
 		EncryptTxt:   true,
-		Managed:      true,
-		NotifyChange: true,
+		NotifyChange: NotifyTypeType,
+		Style:        newStyle(),
 	}
 	result, err = client.PutItemType(itemType)
 	checkResult(result, err, "create test_item_type failed", t)
@@ -89,7 +89,6 @@ func TestOnixClient_Put(t *testing.T) {
 		Description: "Description for test_item_type_attr_1",
 		Type:        "integer",
 		DefValue:    "2",
-		Managed:     false,
 		Required:    false,
 		Regex:       "",
 		ItemTypeKey: "test_item_type",
@@ -167,6 +166,13 @@ func TestOnixClient_Put(t *testing.T) {
 	if len(list.Values) == 0 {
 		t.Error("no value in list")
 	}
+}
+
+func newStyle() map[string]interface{} {
+	style := make(map[string]interface{})
+	style["colour"] = "red"
+	style["thickness"] = 4
+	return style
 }
 
 func getData() *GraphData {
