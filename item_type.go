@@ -39,6 +39,15 @@ const (
 	NotifyTypeItem ChangeNotifyType = "I"
 )
 
+func (n *ChangeNotifyType) ToString() string {
+	switch v := interface{}(n).(type) {
+	case string:
+		return fmt.Sprint(v)
+	default:
+		return fmt.Sprint(NotifyTypeNone)
+	}
+}
+
 // the Item Type resource
 type ItemType struct {
 	Key          string                 `json:"key"`
