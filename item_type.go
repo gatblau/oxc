@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type ItemTypeList struct {
@@ -38,6 +39,19 @@ const (
 	NotifyTypeType ChangeNotifyType = "T"
 	NotifyTypeItem ChangeNotifyType = "I"
 )
+
+func FromString(changeNotifyType string) ChangeNotifyType {
+	switch strings.ToUpper(changeNotifyType) {
+	case "N":
+		return NotifyTypeNone
+	case "T":
+		return NotifyTypeType
+	case "I":
+		return NotifyTypeItem
+	default:
+		return NotifyTypeNone
+	}
+}
 
 func (n *ChangeNotifyType) ToString() string {
 	switch v := interface{}(n).(type) {
