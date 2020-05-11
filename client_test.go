@@ -16,6 +16,7 @@
 package oxc
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 )
@@ -59,7 +60,27 @@ func checkResult(result *Result, err error, msg string, t *testing.T) {
 func TestOnixClient_Put(t *testing.T) {
 	// clear all data!
 	result, err := client.Clear()
+	if result != nil && !result.Changed {
+		err = errors.New(result.Message)
+	}
 	checkResult(result, err, "failed to clear database", t)
+
+	user := &User{
+		Key:     "test_user",
+		Name:    "Test User",
+		Email:   "test@mail.com",
+		Expires: "01-01-2050 10:30:00+0100",
+	}
+	result, err = client.PutUser(user, false)
+	checkResult(result, err, "create test_user failed", t)
+
+	member := &Membership{
+		Key:  "test_user_membership",
+		User: "test_user",
+		Role: "READER",
+	}
+	result, err = client.PutMembership(member)
+	checkResult(result, err, "create test_user_membership failed", t)
 
 	msg := "create test_model failed"
 	model := &Model{
