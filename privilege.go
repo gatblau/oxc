@@ -46,14 +46,14 @@ type Privilege struct {
 	ChangedBy string `json:"changedBy"`
 }
 
-// get the Privilege in the http Response
+// Get the Privilege in the http Response
 func (privilege *Privilege) decode(response *http.Response) (*Privilege, error) {
 	result := new(Privilege)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the privilege resource
+// Get the FQN for the privilege resource
 func (privilege *Privilege) uri(baseUrl string) (string, error) {
 	if len(privilege.Key) == 0 {
 		return "", fmt.Errorf("the privilege does not have a key: cannot construct privilege resource URI")
@@ -61,7 +61,7 @@ func (privilege *Privilege) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/privilege/%s", baseUrl, privilege.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (privilege *Privilege) json() (*bytes.Reader, error) {
 	jsonBytes, err := privilege.bytes()
 	if err != nil {
@@ -70,7 +70,7 @@ func (privilege *Privilege) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (privilege *Privilege) bytes() (*[]byte, error) {
 	b, err := jsonBytes(privilege)
 	return &b, err

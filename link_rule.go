@@ -44,14 +44,14 @@ type LinkRule struct {
 	ChangedBy        string `json:"changedBy"`
 }
 
-// get the Link Rule in the http Response
+// Get the Link Rule in the http Response
 func (rule *LinkRule) decode(response *http.Response) (*LinkRule, error) {
 	result := new(LinkRule)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item type resource
+// Get the FQN for the item type resource
 func (rule *LinkRule) uri(baseUrl string) (string, error) {
 	if len(rule.Key) == 0 {
 		return "", fmt.Errorf("the linkrule does not have a key: cannot construct linkrule resource URI")
@@ -59,7 +59,7 @@ func (rule *LinkRule) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/linkrule/%s", baseUrl, rule.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (rule *LinkRule) json() (*bytes.Reader, error) {
 	jsonBytes, err := rule.bytes()
 	if err != nil {
@@ -68,7 +68,7 @@ func (rule *LinkRule) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (rule *LinkRule) bytes() (*[]byte, error) {
 	b, err := jsonBytes(rule)
 	return &b, err

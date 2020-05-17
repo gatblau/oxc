@@ -33,19 +33,19 @@ type GraphData struct {
 	Links              []Link              `json:"links"`
 }
 
-// get the Item in the http Response
+// Get the Item in the http Response
 func (data *GraphData) decode(response *http.Response) (*GraphData, error) {
 	result := new(GraphData)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the data resource
+// Get the FQN for the data resource
 func (data *GraphData) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/data", baseUrl), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (data *GraphData) json() (*bytes.Reader, error) {
 	jsonBytes, err := data.bytes()
 	if err != nil {
@@ -54,7 +54,7 @@ func (data *GraphData) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (data *GraphData) bytes() (*[]byte, error) {
 	b, err := jsonBytes(data)
 	return &b, err

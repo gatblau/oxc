@@ -16,7 +16,7 @@
 
 package oxc
 
-// issue a put http request with the Partition data as payload to the resource URI
+// issue a Put http request with the Partition data as payload to the resource URI
 func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 	// validates partition
 	if err := partition.valid(); err != nil {
@@ -28,30 +28,30 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	return c.put(uri, partition)
+	// make an http Put request to the service
+	return c.Put(uri, partition, c.addHttpHeaders)
 }
 
-// issue a delete http request to the resource URI
+// issue a Delete http request to the resource URI
 func (c *Client) DeletePartition(partition *Partition) (*Result, error) {
 	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
 
-	// make an http delete request to the service
-	return c.delete(uri)
+	// make an http Delete request to the service
+	return c.Delete(uri, c.addHttpHeaders)
 }
 
-// issue a get http request to the resource URI
+// issue a Get http request to the resource URI
 func (c *Client) GetPartition(partition *Partition) (*Partition, error) {
 	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	result, err := c.get(uri)
+	// make an http Put request to the service
+	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}

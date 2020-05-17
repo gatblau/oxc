@@ -46,14 +46,14 @@ type LinkTypeAttribute struct {
 	ChangedBy   string `json:"changedBy"`
 }
 
-// get the Link Type Attribute in the http Response
+// Get the Link Type Attribute in the http Response
 func (typeAttr *LinkTypeAttribute) decode(response *http.Response) (*LinkTypeAttribute, error) {
 	result := new(LinkTypeAttribute)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item type attribute resource
+// Get the FQN for the item type attribute resource
 func (typeAttr *LinkTypeAttribute) uri(baseUrl string) (string, error) {
 	if len(typeAttr.LinkTypeKey) == 0 {
 		return "", fmt.Errorf("the link type attribute does not have an link type key: cannot construct itemtype attr resource URI")
@@ -64,7 +64,7 @@ func (typeAttr *LinkTypeAttribute) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/linktype/%s/attribute/%s", baseUrl, typeAttr.LinkTypeKey, typeAttr.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (typeAttr *LinkTypeAttribute) json() (*bytes.Reader, error) {
 	jsonBytes, err := typeAttr.bytes()
 	if err != nil {
@@ -73,7 +73,7 @@ func (typeAttr *LinkTypeAttribute) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (typeAttr *LinkTypeAttribute) bytes() (*[]byte, error) {
 	b, err := jsonBytes(typeAttr)
 	return &b, err

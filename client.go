@@ -39,6 +39,10 @@ type entity interface {
 	bytes() (*[]byte, error)
 }
 
+// modify the http request for example by adding any relevant http headers
+// payload is provided for example, in case a Content-MD5 header has to be added to the request
+type HttpRequestProcessor func(req *http.Request, payload entity) error
+
 // Onix HTTP client
 type Client struct {
 	conf  *ClientConf
@@ -97,7 +101,7 @@ func NewClient(conf *ClientConf) (*Client, error) {
 }
 
 // Make a generic HTTP request
-func (c *Client) makeRequest(method string, url string, payload entity) (*Result, error) {
+func (c *Client) MakeRequest(method string, url string, payload entity, processor HttpRequestProcessor) (*Result, error) {
 	// prepares the request body, if no body exists, a nil reader is retrieved
 	reader, err := c.getRequestBody(payload)
 	if err != nil {
@@ -111,9 +115,11 @@ func (c *Client) makeRequest(method string, url string, payload entity) (*Result
 	}
 
 	// add the http headers to the request
-	err = c.addHttpHeaders(req, payload)
-	if err != nil {
-		return &Result{Message: err.Error(), Error: true}, err
+	if processor != nil {
+		err = processor(req, payload)
+		if err != nil {
+			return &Result{Message: err.Error(), Error: true}, err
+		}
 	}
 
 	// submits the request
@@ -144,26 +150,28 @@ func (c *Client) makeRequest(method string, url string, payload entity) (*Result
 }
 
 // Make a PUT HTTP request to the WAPI
-func (c *Client) put(url string, payload entity) (*Result, error) {
-	return c.makeRequest(PUT, url, payload)
+func (c *Client) Put(url string, payload entity, processor HttpRequestProcessor) (*Result, error) {
+	return c.MakeRequest(PUT, url, payload, processor)
 }
 
 // Make a DELETE HTTP request to the WAPI
-func (c *Client) delete(url string) (*Result, error) {
-	return c.makeRequest(DELETE, url, nil)
+func (c *Client) Delete(url string, processor HttpRequestProcessor) (*Result, error) {
+	return c.MakeRequest(DELETE, url, nil, processor)
 }
 
 // Make a GET HTTP request to the WAPI
-func (c *Client) get(url string) (*http.Response, error) {
+func (c *Client) Get(url string, processor HttpRequestProcessor) (*http.Response, error) {
 	// create request
 	req, err := http.NewRequest(GET, url, nil)
 	if err != nil {
 		return nil, err
 	}
-	// add http headers
-	err = c.addHttpHeaders(req, nil)
-	if err != nil {
-		return nil, err
+	// add http request headers
+	if processor != nil {
+		err = processor(req, nil)
+		if err != nil {
+			return nil, err
+		}
 	}
 	// issue http request
 	resp, err := http.DefaultClient.Do(req)
@@ -188,7 +196,7 @@ func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
 	req.Header.Set("Content-Type", "application/json")
 	// if there is a payload
 	if payload != nil {
-		// get the bytes in the entity
+		// Get the bytes in the entity
 		data, err := payload.bytes()
 		if err != nil {
 			return err

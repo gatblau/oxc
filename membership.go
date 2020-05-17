@@ -43,14 +43,14 @@ type Membership struct {
 	ChangedBy string `json:"changedBy"`
 }
 
-// get the Role in the http Response
+// Get the Role in the http Response
 func (member *Membership) decode(response *http.Response) (*Membership, error) {
 	result := new(Membership)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item resource
+// Get the FQN for the item resource
 func (member *Membership) uri(baseUrl string) (string, error) {
 	if len(member.Key) == 0 {
 		return "", fmt.Errorf("the membership does not have a key: cannot construct Membership resource URI")
@@ -58,7 +58,7 @@ func (member *Membership) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/membership/%s", baseUrl, member.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (member *Membership) json() (*bytes.Reader, error) {
 	jsonBytes, err := member.bytes()
 	if err != nil {
@@ -67,7 +67,7 @@ func (member *Membership) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (member *Membership) bytes() (*[]byte, error) {
 	b, err := jsonBytes(member)
 	return &b, err

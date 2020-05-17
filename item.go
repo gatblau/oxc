@@ -50,21 +50,21 @@ type Item struct {
 	ChangedBy   string                 `json:"changedBy"`
 }
 
-// get the Item in the http Response
+// Get the Item in the http Response
 func (item *Item) decode(response *http.Response) (*Item, error) {
 	result := new(Item)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the ItemList in the http Response
+// Get the ItemList in the http Response
 func (item *Item) decodeList(response *http.Response) (*ItemList, error) {
 	result := new(ItemList)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item resource
+// Get the FQN for the item resource
 func (item *Item) uri(baseUrl string) (string, error) {
 	if len(item.Key) == 0 {
 		return "", fmt.Errorf("the item does not have a key: cannot construct Item resource URI")
@@ -72,7 +72,7 @@ func (item *Item) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/item/%s", baseUrl, item.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (item *Item) json() (*bytes.Reader, error) {
 	jsonBytes, err := item.bytes()
 	if err != nil {
@@ -81,7 +81,7 @@ func (item *Item) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (item *Item) bytes() (*[]byte, error) {
 	b, err := jsonBytes(item)
 	return &b, err
@@ -97,7 +97,7 @@ func (item *Item) valid() error {
 	return nil
 }
 
-// get the FQN for the item / children resource
+// Get the FQN for the item / children resource
 func (item *Item) uriItemChildren(baseUrl string) (string, error) {
 	if len(item.Key) == 0 {
 		return "", fmt.Errorf("the item does not have a key: cannot construct Item/Children resource URI")

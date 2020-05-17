@@ -81,14 +81,14 @@ type ItemType struct {
 	ChangedBy    string                 `json:"changedBy"`
 }
 
-// get the Item Type in the http Response
+// Get the Item Type in the http Response
 func (itemType *ItemType) decode(response *http.Response) (*ItemType, error) {
 	result := new(ItemType)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item type resource
+// Get the FQN for the item type resource
 func (itemType *ItemType) uri(baseUrl string) (string, error) {
 	if len(itemType.Key) == 0 {
 		return "", fmt.Errorf("the item type does not have a key: cannot construct itemtype resource URI")
@@ -96,7 +96,7 @@ func (itemType *ItemType) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/itemtype/%s", baseUrl, itemType.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (itemType *ItemType) json() (*bytes.Reader, error) {
 	jsonBytes, err := itemType.bytes()
 	if err != nil {
@@ -105,7 +105,7 @@ func (itemType *ItemType) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (itemType *ItemType) bytes() (*[]byte, error) {
 	b, err := jsonBytes(itemType)
 	return &b, err

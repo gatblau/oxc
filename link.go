@@ -46,14 +46,14 @@ type Link struct {
 	ChangedBy    string                 `json:"changedBy"`
 }
 
-// get the Link in the http Response
+// Get the Link in the http Response
 func (link *Link) decode(response *http.Response) (*Link, error) {
 	result := new(Link)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the link type resource
+// Get the FQN for the link type resource
 func (link *Link) uri(baseUrl string) (string, error) {
 	if len(link.Key) == 0 {
 		return "", fmt.Errorf("the link does not have a key: cannot construct link resource URI")
@@ -61,7 +61,7 @@ func (link *Link) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/link/%s", baseUrl, link.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (link *Link) json() (*bytes.Reader, error) {
 	jsonBytes, err := link.bytes()
 	if err != nil {
@@ -70,7 +70,7 @@ func (link *Link) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (link *Link) bytes() (*[]byte, error) {
 	b, err := jsonBytes(link)
 	return &b, err

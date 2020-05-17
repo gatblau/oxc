@@ -45,14 +45,14 @@ type Model struct {
 	ChangedBy   string `json:"changedBy"`
 }
 
-// get the Model in the http Response
+// Get the Model in the http Response
 func (model *Model) decode(response *http.Response) (*Model, error) {
 	result := new(Model)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the model resource
+// Get the FQN for the model resource
 func (model *Model) uri(baseUrl string) (string, error) {
 	if len(model.Key) == 0 {
 		return "", fmt.Errorf("the model does not have a key: cannot construct Model resource URI")
@@ -60,7 +60,7 @@ func (model *Model) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/model/%s", baseUrl, model.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (model *Model) json() (*bytes.Reader, error) {
 	jsonBytes, err := model.bytes()
 	if err != nil {
@@ -69,7 +69,7 @@ func (model *Model) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (model *Model) bytes() (*[]byte, error) {
 	b, err := jsonBytes(model)
 	return &b, err

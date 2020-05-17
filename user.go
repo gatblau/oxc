@@ -45,14 +45,14 @@ type User struct {
 	ChangedBy string `json:"changedBy"`
 }
 
-// get the Role in the http Response
+// Get the Role in the http Response
 func (user *User) decode(response *http.Response) (*User, error) {
 	result := new(User)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item resource
+// Get the FQN for the item resource
 func (user *User) uri(baseUrl string) (string, error) {
 	if len(user.Key) == 0 {
 		return "", fmt.Errorf("the user does not have a key: cannot construct User resource URI")
@@ -60,7 +60,7 @@ func (user *User) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/user/%s", baseUrl, user.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (user *User) json() (*bytes.Reader, error) {
 	jsonBytes, err := user.bytes()
 	if err != nil {
@@ -69,7 +69,7 @@ func (user *User) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (user *User) bytes() (*[]byte, error) {
 	b, err := jsonBytes(user)
 	return &b, err

@@ -15,7 +15,7 @@
 */
 package oxc
 
-// issue a put http request with the Link rule data as payload to the resource URI
+// issue a Put http request with the Link rule data as payload to the resource URI
 func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 	// validates link rule
 	if err := linkRule.valid(); err != nil {
@@ -27,11 +27,11 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	return c.put(uri, linkRule)
+	// make an http Put request to the service
+	return c.Put(uri, linkRule, c.addHttpHeaders)
 }
 
-// issue a delete http request to the resource URI
+// issue a Delete http request to the resource URI
 func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
 	uri, err := linkRule.uri(c.conf.BaseURI)
 
@@ -39,19 +39,19 @@ func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
 		return nil, err
 	}
 
-	// make an http delete request to the service
-	return c.delete(uri)
+	// make an http Delete request to the service
+	return c.Delete(uri, c.addHttpHeaders)
 }
 
-// issue a get http request to the resource URI
+// issue a Get http request to the resource URI
 func (c *Client) GetLinkRule(linkRule *LinkRule) (*LinkRule, error) {
 	uri, err := linkRule.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	result, err := c.get(uri)
+	// make an http Put request to the service
+	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}

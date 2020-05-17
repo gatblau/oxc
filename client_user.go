@@ -16,7 +16,7 @@
 
 package oxc
 
-// issue a put http request with the User data as payload to the resource URI
+// issue a Put http request with the User data as payload to the resource URI
 // notify: if true, emails new users to make them aware of the new account
 //   requires the service to have email integration enabled
 func (c *Client) PutUser(user *User, notify bool) (*Result, error) {
@@ -37,30 +37,30 @@ func (c *Client) PutUser(user *User, notify bool) (*Result, error) {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	return c.put(uri, user)
+	// make an http Put request to the service
+	return c.Put(uri, user, c.addHttpHeaders)
 }
 
-// issue a delete http request to the resource URI
+// issue a Delete http request to the resource URI
 func (c *Client) DeleteUser(user *User) (*Result, error) {
 	uri, err := user.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
 
-	// make an http delete request to the service
-	return c.delete(uri)
+	// make an http Delete request to the service
+	return c.Delete(uri, c.addHttpHeaders)
 }
 
-// issue a get http request to the resource URI
+// issue a Get http request to the resource URI
 func (c *Client) GetUser(user *User) (*User, error) {
 	uri, err := user.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
 
-	// make an http put request to the service
-	result, err := c.get(uri)
+	// make an http Put request to the service
+	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}

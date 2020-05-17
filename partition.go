@@ -44,14 +44,14 @@ type Partition struct {
 	ChangedBy   string `json:"changedBy"`
 }
 
-// get the Partition in the http Response
+// Get the Partition in the http Response
 func (partition *Partition) decode(response *http.Response) (*Partition, error) {
 	result := new(Partition)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item resource
+// Get the FQN for the item resource
 func (partition *Partition) uri(baseUrl string) (string, error) {
 	if len(partition.Key) == 0 {
 		return "", fmt.Errorf("the partition does not have a key: cannot construct Partition resource URI")
@@ -59,7 +59,7 @@ func (partition *Partition) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/partition/%s", baseUrl, partition.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (partition *Partition) json() (*bytes.Reader, error) {
 	jsonBytes, err := partition.bytes()
 	if err != nil {
@@ -68,7 +68,7 @@ func (partition *Partition) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (partition *Partition) bytes() (*[]byte, error) {
 	b, err := jsonBytes(partition)
 	return &b, err

@@ -45,14 +45,14 @@ type Role struct {
 	ChangedBy   string `json:"changedBy"`
 }
 
-// get the Role in the http Response
+// Get the Role in the http Response
 func (role *Role) decode(response *http.Response) (*Role, error) {
 	result := new(Role)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
 }
 
-// get the FQN for the item resource
+// Get the FQN for the item resource
 func (role *Role) uri(baseUrl string) (string, error) {
 	if len(role.Key) == 0 {
 		return "", fmt.Errorf("the role does not have a key: cannot construct Role resource URI")
@@ -60,7 +60,7 @@ func (role *Role) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/role/%s", baseUrl, role.Key), nil
 }
 
-// get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the entity
 func (role *Role) json() (*bytes.Reader, error) {
 	jsonBytes, err := role.bytes()
 	if err != nil {
@@ -69,7 +69,7 @@ func (role *Role) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// get a []byte representing the entity
+// Get a []byte representing the entity
 func (role *Role) bytes() (*[]byte, error) {
 	b, err := jsonBytes(role)
 	return &b, err
