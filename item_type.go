@@ -28,7 +28,7 @@ type ItemTypeList struct {
 }
 
 func (list *ItemTypeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -107,7 +107,7 @@ func (itemType *ItemType) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (itemType *ItemType) bytes() (*[]byte, error) {
-	b, err := jsonBytes(itemType)
+	b, err := ToJson(itemType)
 	return &b, err
 }
 

@@ -242,7 +242,7 @@ func (c *Client) getRequestBody(payload Serializable) (*bytes.Reader, error) {
 
 // convert the passed-in object to a JSON byte slice
 // NOTE: json.Marshal is purposely not used as it will escape any < > characters
-func jsonBytes(object interface{}) ([]byte, error) {
+func ToJson(object interface{}) ([]byte, error) {
 	buffer := &bytes.Buffer{}
 	encoder := json.NewEncoder(buffer)
 	// switch off the escaping!

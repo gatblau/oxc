@@ -27,7 +27,7 @@ type LinkRuleList struct {
 }
 
 func (list *LinkRuleList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -70,7 +70,7 @@ func (rule *LinkRule) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (rule *LinkRule) bytes() (*[]byte, error) {
-	b, err := jsonBytes(rule)
+	b, err := ToJson(rule)
 	return &b, err
 }
 

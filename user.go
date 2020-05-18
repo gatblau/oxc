@@ -28,7 +28,7 @@ type UserList struct {
 }
 
 func (list *UserList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -71,7 +71,7 @@ func (user *User) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (user *User) bytes() (*[]byte, error) {
-	b, err := jsonBytes(user)
+	b, err := ToJson(user)
 	return &b, err
 }
 

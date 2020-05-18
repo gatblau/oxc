@@ -27,7 +27,7 @@ type LinkTypeList struct {
 }
 
 func (list *LinkTypeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -73,7 +73,7 @@ func (linkType *LinkType) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (linkType *LinkType) bytes() (*[]byte, error) {
-	b, err := jsonBytes(linkType)
+	b, err := ToJson(linkType)
 	return &b, err
 }
 

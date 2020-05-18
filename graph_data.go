@@ -56,6 +56,6 @@ func (data *GraphData) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (data *GraphData) bytes() (*[]byte, error) {
-	b, err := jsonBytes(data)
+	b, err := ToJson(data)
 	return &b, err
 }

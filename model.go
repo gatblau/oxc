@@ -28,7 +28,7 @@ type ModelList struct {
 }
 
 func (list *ModelList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -71,7 +71,7 @@ func (model *Model) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (model *Model) bytes() (*[]byte, error) {
-	b, err := jsonBytes(model)
+	b, err := ToJson(model)
 	return &b, err
 }
 

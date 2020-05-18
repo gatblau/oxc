@@ -28,7 +28,7 @@ type MembershipList struct {
 }
 
 func (list *MembershipList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -69,7 +69,7 @@ func (member *Membership) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (member *Membership) bytes() (*[]byte, error) {
-	b, err := jsonBytes(member)
+	b, err := ToJson(member)
 	return &b, err
 }
 

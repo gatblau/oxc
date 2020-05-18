@@ -27,7 +27,7 @@ type ItemTypeAttributeList struct {
 }
 
 func (list *ItemTypeAttributeList) json() (*bytes.Reader, error) {
-	jsonBytes, err := jsonBytes(list)
+	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
 
@@ -75,7 +75,7 @@ func (typeAttr *ItemTypeAttribute) json() (*bytes.Reader, error) {
 
 // Get a []byte representing the Serializable
 func (typeAttr *ItemTypeAttribute) bytes() (*[]byte, error) {
-	b, err := jsonBytes(typeAttr)
+	b, err := ToJson(typeAttr)
 	return &b, err
 }
 
