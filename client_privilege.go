@@ -29,7 +29,9 @@ func (c *Client) PutPrivilege(privilege *Privilege) (*Result, error) {
 	}
 
 	// make an http Put request to the service
-	return c.Put(uri, privilege, c.addHttpHeaders)
+	resp, err := c.Put(uri, privilege, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -40,7 +42,9 @@ func (c *Client) DeletePrivilege(privilege *Privilege) (*Result, error) {
 	}
 
 	// make an http Delete request to the service
-	return c.Delete(uri, c.addHttpHeaders)
+	resp, err := c.Delete(uri, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Get http request to the resource URI

@@ -59,6 +59,36 @@ type Result struct {
 	Ref       string `json:"ref"`
 }
 
+// creates a new result from an http response
+func newResult(response *http.Response, err error) (*Result, error) {
+	// if the response contains an error then returns
+	if err != nil {
+		return &Result{Message: err.Error(), Error: true}, err
+	}
+
+	// decodes the response
+	result := new(Result)
+	err = json.NewDecoder(response.Body).Decode(result)
+
+	if err != nil {
+		return result, err
+	}
+
+	// check for response status
+	if response.StatusCode >= 300 {
+		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
+	}
+
+	defer func() {
+		if ferr := response.Body.Close(); ferr != nil {
+			err = ferr
+		}
+	}()
+
+	// returns the result
+	return result, err
+}
+
 // Response to an OAUth 2.0 token request
 type OAuthTokenResponse struct {
 	AccessToken string `json:"access_token"`
@@ -101,61 +131,48 @@ func NewClient(conf *ClientConf) (*Client, error) {
 }
 
 // Make a generic HTTP request
-func (c *Client) MakeRequest(method string, url string, payload entity, processor HttpRequestProcessor) (*Result, error) {
+func (c *Client) MakeRequest(method string, url string, payload entity, processor HttpRequestProcessor) (*http.Response, error) {
 	// prepares the request body, if no body exists, a nil reader is retrieved
 	reader, err := c.getRequestBody(payload)
 	if err != nil {
-		return &Result{Message: err.Error(), Error: true}, err
+		return nil, err
 	}
 
 	// creates the request
 	req, err := http.NewRequest(method, url, reader)
 	if err != nil {
-		return &Result{Message: err.Error(), Error: true}, err
+		return nil, err
 	}
 
 	// add the http headers to the request
 	if processor != nil {
 		err = processor(req, payload)
 		if err != nil {
-			return &Result{Message: err.Error(), Error: true}, err
+			return nil, err
 		}
 	}
 
 	// submits the request
-	response, err := http.DefaultClient.Do(req)
+	resp, err := http.DefaultClient.Do(req)
 
-	// if the response contains an error then returns
-	if err != nil {
-		return &Result{Message: err.Error(), Error: true}, err
+	// do we have a nil response?
+	if resp == nil {
+		return resp, errors.New(fmt.Sprintf("error: response was empty for resource: %s", url))
 	}
-
-	// decodes the response
-	result := new(Result)
-	err = json.NewDecoder(response.Body).Decode(result)
-
-	if err != nil {
-		return result, err
-	}
-
 	// check for response status
-	if response.StatusCode >= 300 {
-		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
+	if resp.StatusCode >= 300 {
+		err = errors.New(fmt.Sprintf("error: response returned status: %s", resp.Status))
 	}
-
-	err = response.Body.Close()
-
-	// returns the result
-	return result, err
+	return resp, err
 }
 
 // Make a PUT HTTP request to the WAPI
-func (c *Client) Put(url string, payload entity, processor HttpRequestProcessor) (*Result, error) {
+func (c *Client) Put(url string, payload entity, processor HttpRequestProcessor) (*http.Response, error) {
 	return c.MakeRequest(PUT, url, payload, processor)
 }
 
 // Make a DELETE HTTP request to the WAPI
-func (c *Client) Delete(url string, processor HttpRequestProcessor) (*Result, error) {
+func (c *Client) Delete(url string, processor HttpRequestProcessor) (*http.Response, error) {
 	return c.MakeRequest(DELETE, url, nil, processor)
 }
 

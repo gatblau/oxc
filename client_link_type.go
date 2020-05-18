@@ -28,7 +28,9 @@ func (c *Client) PutLinkType(linkType *LinkType) (*Result, error) {
 	}
 
 	// make an http Put request to the service
-	return c.Put(uri, linkType, c.addHttpHeaders)
+	resp, err := c.Put(uri, linkType, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -40,7 +42,9 @@ func (c *Client) DeleteLinkType(linkType *LinkType) (*Result, error) {
 	}
 
 	// make an http Delete request to the service
-	return c.Delete(uri, c.addHttpHeaders)
+	resp, err := c.Delete(uri, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Get http request to the resource URI

@@ -23,5 +23,7 @@ func (c *Client) PutData(data *GraphData) (*Result, error) {
 	}
 
 	// make an http Put request to the service
-	return c.Put(uri, data, c.addHttpHeaders)
+	resp, err := c.Put(uri, data, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }

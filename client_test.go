@@ -71,14 +71,22 @@ func TestOnixClient_Put(t *testing.T) {
 		Email:   "test@mail.com",
 		Expires: "01-01-2050 10:30:00+0100",
 	}
-	result, err = client.PutUser(user, false)
-	checkResult(result, err, "create test_user failed", t)
 
 	member := &Membership{
 		Key:  "test_user_membership",
 		User: "test_user",
 		Role: "READER",
 	}
+
+	// delete the membership if already exists
+	result, err = client.DeleteMembership(member)
+
+	// delete the user if already exists
+	result, err = client.DeleteUser(user)
+
+	result, err = client.PutUser(user, false)
+	checkResult(result, err, "create test_user failed", t)
+
 	result, err = client.PutMembership(member)
 	checkResult(result, err, "create test_user_membership failed", t)
 

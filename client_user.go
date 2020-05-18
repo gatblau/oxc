@@ -27,18 +27,20 @@ func (c *Client) PutUser(user *User, notify bool) (*Result, error) {
 
 	uri, err := user.uri(c.conf.BaseURI)
 
+	if err != nil {
+		return nil, err
+	}
+
 	if notify {
 		uri += "?notify=true"
 	} else {
 		uri += "?notify=false"
 	}
 
-	if err != nil {
-		return nil, err
-	}
-
 	// make an http Put request to the service
-	return c.Put(uri, user, c.addHttpHeaders)
+	resp, err := c.Put(uri, user, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -49,7 +51,9 @@ func (c *Client) DeleteUser(user *User) (*Result, error) {
 	}
 
 	// make an http Delete request to the service
-	return c.Delete(uri, c.addHttpHeaders)
+	resp, err := c.Delete(uri, c.addHttpHeaders)
+
+	return newResult(resp, err)
 }
 
 // issue a Get http request to the resource URI
