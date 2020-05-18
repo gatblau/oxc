@@ -61,7 +61,7 @@ func (privilege *Privilege) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/privilege/%s", baseUrl, privilege.Key), nil
 }
 
-// Get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the Serializable
 func (privilege *Privilege) json() (*bytes.Reader, error) {
 	jsonBytes, err := privilege.bytes()
 	if err != nil {
@@ -70,7 +70,7 @@ func (privilege *Privilege) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// Get a []byte representing the entity
+// Get a []byte representing the Serializable
 func (privilege *Privilege) bytes() (*[]byte, error) {
 	b, err := jsonBytes(privilege)
 	return &b, err

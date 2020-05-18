@@ -45,7 +45,7 @@ func (data *GraphData) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/data", baseUrl), nil
 }
 
-// Get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the Serializable
 func (data *GraphData) json() (*bytes.Reader, error) {
 	jsonBytes, err := data.bytes()
 	if err != nil {
@@ -54,7 +54,7 @@ func (data *GraphData) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// Get a []byte representing the entity
+// Get a []byte representing the Serializable
 func (data *GraphData) bytes() (*[]byte, error) {
 	b, err := jsonBytes(data)
 	return &b, err

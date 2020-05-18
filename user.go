@@ -60,7 +60,7 @@ func (user *User) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/user/%s", baseUrl, user.Key), nil
 }
 
-// Get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the Serializable
 func (user *User) json() (*bytes.Reader, error) {
 	jsonBytes, err := user.bytes()
 	if err != nil {
@@ -69,7 +69,7 @@ func (user *User) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// Get a []byte representing the entity
+// Get a []byte representing the Serializable
 func (user *User) bytes() (*[]byte, error) {
 	b, err := jsonBytes(user)
 	return &b, err

@@ -34,14 +34,14 @@ const (
 )
 
 // all entities interface for payload serialisation
-type entity interface {
+type Serializable interface {
 	json() (*bytes.Reader, error)
 	bytes() (*[]byte, error)
 }
 
 // modify the http request for example by adding any relevant http headers
 // payload is provided for example, in case a Content-MD5 header has to be added to the request
-type HttpRequestProcessor func(req *http.Request, payload entity) error
+type HttpRequestProcessor func(req *http.Request, payload Serializable) error
 
 // Onix HTTP client
 type Client struct {
@@ -131,7 +131,7 @@ func NewClient(conf *ClientConf) (*Client, error) {
 }
 
 // Make a generic HTTP request
-func (c *Client) MakeRequest(method string, url string, payload entity, processor HttpRequestProcessor) (*http.Response, error) {
+func (c *Client) MakeRequest(method string, url string, payload Serializable, processor HttpRequestProcessor) (*http.Response, error) {
 	// prepares the request body, if no body exists, a nil reader is retrieved
 	reader, err := c.getRequestBody(payload)
 	if err != nil {
@@ -167,7 +167,7 @@ func (c *Client) MakeRequest(method string, url string, payload entity, processo
 }
 
 // Make a PUT HTTP request to the WAPI
-func (c *Client) Put(url string, payload entity, processor HttpRequestProcessor) (*http.Response, error) {
+func (c *Client) Put(url string, payload Serializable, processor HttpRequestProcessor) (*http.Response, error) {
 	return c.MakeRequest(PUT, url, payload, processor)
 }
 
@@ -204,7 +204,7 @@ func (c *Client) Get(url string, processor HttpRequestProcessor) (*http.Response
 }
 
 // add http headers to the request object
-func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
+func (c *Client) addHttpHeaders(req *http.Request, payload Serializable) error {
 	// add authorization header if there is a token defined
 	if len(c.token) > 0 {
 		req.Header.Set("Authorization", c.token)
@@ -213,7 +213,7 @@ func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
 	req.Header.Set("Content-Type", "application/json")
 	// if there is a payload
 	if payload != nil {
-		// Get the bytes in the entity
+		// Get the bytes in the Serializable
 		data, err := payload.bytes()
 		if err != nil {
 			return err
@@ -230,7 +230,7 @@ func (c *Client) addHttpHeaders(req *http.Request, payload entity) error {
 	return nil
 }
 
-func (c *Client) getRequestBody(payload entity) (*bytes.Reader, error) {
+func (c *Client) getRequestBody(payload Serializable) (*bytes.Reader, error) {
 	// if no payload exists
 	if payload == nil {
 		// returns an empty reader

@@ -59,7 +59,7 @@ func (partition *Partition) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/partition/%s", baseUrl, partition.Key), nil
 }
 
-// Get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the Serializable
 func (partition *Partition) json() (*bytes.Reader, error) {
 	jsonBytes, err := partition.bytes()
 	if err != nil {
@@ -68,7 +68,7 @@ func (partition *Partition) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// Get a []byte representing the entity
+// Get a []byte representing the Serializable
 func (partition *Partition) bytes() (*[]byte, error) {
 	b, err := jsonBytes(partition)
 	return &b, err

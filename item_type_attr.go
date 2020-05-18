@@ -64,7 +64,7 @@ func (typeAttr *ItemTypeAttribute) uri(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/itemtype/%s/attribute/%s", baseUrl, typeAttr.ItemTypeKey, typeAttr.Key), nil
 }
 
-// Get a JSON bytes reader for the entity
+// Get a JSON bytes reader for the Serializable
 func (typeAttr *ItemTypeAttribute) json() (*bytes.Reader, error) {
 	jsonBytes, err := typeAttr.bytes()
 	if err != nil {
@@ -73,7 +73,7 @@ func (typeAttr *ItemTypeAttribute) json() (*bytes.Reader, error) {
 	return bytes.NewReader(*jsonBytes), err
 }
 
-// Get a []byte representing the entity
+// Get a []byte representing the Serializable
 func (typeAttr *ItemTypeAttribute) bytes() (*[]byte, error) {
 	b, err := jsonBytes(typeAttr)
 	return &b, err

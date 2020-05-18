@@ -52,7 +52,7 @@ func checkResult(result *Result, err error, msg string, t *testing.T) {
 		if result.Error {
 			t.Error(fmt.Sprintf("%s: %s", msg, result.Message))
 		} else if result.Operation == "L" {
-			t.Error(fmt.Sprintf("Fail to update - Locked entity: %s", result.Ref))
+			t.Error(fmt.Sprintf("Fail to update - Locked Serializable: %s", result.Ref))
 		}
 	}
 }
