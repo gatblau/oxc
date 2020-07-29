@@ -61,24 +61,12 @@ type Result struct {
 
 // creates a new result from an http response
 func newResult(response *http.Response, err error) (*Result, error) {
-	// if the response contains an error then returns
-	if err != nil {
-		return &Result{Message: err.Error(), Error: true}, err
-	}
-
 	// decodes the response
 	result := new(Result)
 	err = json.NewDecoder(response.Body).Decode(result)
-
 	if err != nil {
 		return result, err
 	}
-
-	// check for response status
-	if response.StatusCode >= 300 {
-		err = errors.New(fmt.Sprintf("error: response returned status: %s", response.Status))
-	}
-
 	defer func() {
 		if ferr := response.Body.Close(); ferr != nil {
 			err = ferr
