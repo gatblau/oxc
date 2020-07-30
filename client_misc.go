@@ -20,5 +20,8 @@ import "fmt"
 // clear all data in the database
 func (c *Client) Clear() (*Result, error) {
 	resp, err := c.Delete(fmt.Sprintf("%s/clear", c.conf.BaseURI), c.addHttpHeaders)
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }

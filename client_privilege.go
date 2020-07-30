@@ -22,16 +22,15 @@ func (c *Client) PutPrivilege(privilege *Privilege) (*Result, error) {
 	if err := privilege.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := privilege.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, privilege, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
@@ -40,11 +39,11 @@ func (c *Client) DeletePrivilege(privilege *Privilege) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
@@ -53,20 +52,15 @@ func (c *Client) GetPrivilege(privilege *Privilege) (*Privilege, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}
-
 	i, err := privilege.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return i, err
 }

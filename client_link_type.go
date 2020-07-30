@@ -21,30 +21,28 @@ func (c *Client) PutLinkType(linkType *LinkType) (*Result, error) {
 	if err := linkType.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := linkType.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, linkType, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
 func (c *Client) DeleteLinkType(linkType *LinkType) (*Result, error) {
 	uri, err := linkType.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
@@ -53,12 +51,9 @@ func (c *Client) GetLinkType(linkType *LinkType) (*LinkType, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}
-
 	return linkType.decode(result)
 }

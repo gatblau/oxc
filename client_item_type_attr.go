@@ -21,47 +21,39 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	if err := typeAttr.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := typeAttr.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, typeAttr, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
 func (c *Client) DeleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	uri, err := typeAttr.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
 func (c *Client) GetItemTypeAttr(typeAttr *ItemTypeAttribute) (*ItemTypeAttribute, error) {
 	uri, err := typeAttr.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
-
 	if err != nil {
 		return nil, err
 	}
-
 	return typeAttr.decode(result)
 }

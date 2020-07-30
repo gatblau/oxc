@@ -21,56 +21,46 @@ func (c *Client) PutItemType(itemType *ItemType) (*Result, error) {
 	if err := itemType.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := itemType.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, itemType, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
 func (c *Client) DeleteItemType(itemType *ItemType) (*Result, error) {
 	uri, err := itemType.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
 // itemType: an instance of the Item Type with the key of the item to retrieve
 func (c *Client) GetItemType(itemType *ItemType) (*ItemType, error) {
 	uri, err := itemType.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
-
 	if err != nil {
 		return nil, err
 	}
-
 	it, err := itemType.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return it, err
 }

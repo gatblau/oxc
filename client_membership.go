@@ -22,17 +22,15 @@ func (c *Client) PutMembership(member *Membership) (*Result, error) {
 	if err := member.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := member.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, member, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
@@ -41,11 +39,11 @@ func (c *Client) DeleteMembership(member *Membership) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
@@ -54,20 +52,15 @@ func (c *Client) GetMembership(member *Membership) (*Membership, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}
-
 	i, err := member.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return i, err
 }

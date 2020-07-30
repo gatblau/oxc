@@ -24,23 +24,20 @@ func (c *Client) PutUser(user *User, notify bool) (*Result, error) {
 	if err := user.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := user.uri(c.conf.BaseURI)
-
 	if err != nil {
 		return nil, err
 	}
-
 	if notify {
 		uri += "?notify=true"
 	} else {
 		uri += "?notify=false"
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, user, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
@@ -49,11 +46,11 @@ func (c *Client) DeleteUser(user *User) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
@@ -62,20 +59,15 @@ func (c *Client) GetUser(user *User) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}
-
 	i, err := user.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return i, err
 }

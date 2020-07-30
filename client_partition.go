@@ -22,16 +22,15 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 	if err := partition.valid(); err != nil {
 		return nil, err
 	}
-
 	uri, err := partition.uri(c.conf.BaseURI)
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	resp, err := c.Put(uri, partition, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Delete http request to the resource URI
@@ -40,11 +39,11 @@ func (c *Client) DeletePartition(partition *Partition) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp, err)
+	if err != nil {
+		return nil, err
+	}
+	return newResult(resp)
 }
 
 // issue a Get http request to the resource URI
@@ -53,20 +52,15 @@ func (c *Client) GetPartition(partition *Partition) (*Partition, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Put request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
 	if err != nil {
 		return nil, err
 	}
-
 	i, err := partition.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return i, err
 }
