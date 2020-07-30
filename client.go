@@ -75,7 +75,7 @@ func newResult(response *http.Response) (*Result, error) {
 		}
 	}()
 	// returns the result
-	return result, err
+	return result, nil
 }
 
 // Response to an OAUth 2.0 token request

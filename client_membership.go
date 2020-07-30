@@ -18,7 +18,6 @@ package oxc
 
 // issue a Put http request with the Membership data as payload to the resource URI
 func (c *Client) PutMembership(member *Membership) (*Result, error) {
-	// validates member
 	if err := member.valid(); err != nil {
 		return nil, err
 	}
@@ -27,10 +26,10 @@ func (c *Client) PutMembership(member *Membership) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, member, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	return newResult(resp)
+	return nil, err
 }
 
 // issue a Delete http request to the resource URI
@@ -40,10 +39,10 @@ func (c *Client) DeleteMembership(member *Membership) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	return newResult(resp)
+	return nil, err
 }
 
 // issue a Get http request to the resource URI

@@ -17,7 +17,6 @@ package oxc
 
 // issue a Put http request with the Item data as payload to the resource URI
 func (c *Client) PutItem(item *Item) (*Result, error) {
-	// checks the item is valid
 	if err := item.valid(); err != nil {
 		return nil, err
 	}
@@ -26,20 +25,11 @@ func (c *Client) PutItem(item *Item) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	// make an http Put request to the service
 	resp, err := c.Put(uri, item, c.addHttpHeaders)
-	// if there is a technical error then return it
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	// de-serialise the response
-	result, err := newResult(resp)
-	// if the de-serialisation fails the returns the error
-	if err != nil {
-		return nil, err
-	}
-	// otherwise returns the response
-	return result, nil
+	return nil, err
 }
 
 // issue a Delete http request to the resource URI
@@ -48,11 +38,11 @@ func (c *Client) DeleteItem(item *Item) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Delete request to the service
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-
-	return newResult(resp)
+	if resp != nil {
+		return newResult(resp)
+	}
+	return nil, err
 }
 
 // issue a Get http request to the resource URI
@@ -61,22 +51,16 @@ func (c *Client) GetItem(item *Item) (*Item, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// make an http Get request to the service
 	result, err := c.Get(uri, c.addHttpHeaders)
-
 	if err != nil {
 		return nil, err
 	}
-
 	i, err := item.decode(result)
-
 	defer func() {
 		if ferr := result.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-
 	return i, err
 }
 

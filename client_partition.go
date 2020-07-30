@@ -27,10 +27,10 @@ func (c *Client) PutPartition(partition *Partition) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, partition, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	return newResult(resp)
+	return nil, err
 }
 
 // issue a Delete http request to the resource URI

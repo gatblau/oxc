@@ -27,10 +27,10 @@ func (c *Client) PutModel(model *Model) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, model, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	return newResult(resp)
+	return nil, err
 }
 
 // issue a Delete http request to the resource URI
@@ -40,7 +40,10 @@ func (c *Client) DeleteModel(model *Model) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	return newResult(resp)
+	if resp != nil {
+		return newResult(resp)
+	}
+	return nil, err
 }
 
 // issue a Get http request to the resource URI

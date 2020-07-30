@@ -17,7 +17,6 @@ package oxc
 
 // issue a Put http request with the Link rule data as payload to the resource URI
 func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
-	// validates link rule
 	if err := linkRule.valid(); err != nil {
 		return nil, err
 	}
@@ -25,10 +24,7 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.Put(uri, linkRule, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
-	}
+	resp, _ := c.Put(uri, linkRule, c.addHttpHeaders)
 	return newResult(resp)
 }
 
@@ -39,10 +35,10 @@ func (c *Client) DeleteLinkRule(linkRule *LinkRule) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
+	if resp != nil {
+		return newResult(resp)
 	}
-	return newResult(resp)
+	return nil, err
 }
 
 // issue a Get http request to the resource URI
