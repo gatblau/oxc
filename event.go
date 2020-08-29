@@ -1,0 +1,79 @@
+/*
+   Onix Config Manager - Terraform Provider
+   Copyright (c) 2018-2020 by www.gatblau.org
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under
+   the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
+
+   Contributors to this project, hereby assign copyright in this code to the project,
+   to be licensed under the same terms as the rest of the code.
+*/
+package oxc
+
+import (
+	"crypto/tls"
+	"fmt"
+	MQTT "github.com/eclipse/paho.mqtt.golang"
+)
+
+// MQTT client for change notifications
+type EventManager struct {
+	done   chan bool
+	cfg    EventConfig
+	client MQTT.Client
+}
+
+// creates a new event manager subscribed to a specific topic
+// cfg: the mqtt server configuration
+func NewEventManager(cfg EventConfig) (*EventManager, error) {
+	// check the configuration is valid (preconditions)
+	if ok, err := cfg.isValid(); !ok {
+		return nil, err
+	}
+	m := new(EventManager)
+	// create connection configuration
+	connOpts := MQTT.NewClientOptions().AddBroker(cfg.server).SetClientID(cfg.clientId()).SetCleanSession(true)
+	// add credentials if provided
+	if cfg.hasCredentials() {
+		connOpts.SetUsername(cfg.username)
+		connOpts.SetPassword(cfg.password)
+	}
+	// setup tls configuration
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: cfg.insecureSkipVerify,
+		ClientAuth:         cfg.clientAuthType,
+	}
+	connOpts.SetTLSConfig(tlsConfig)
+	// subscribe to the topic on connection
+	connOpts.OnConnect = func(c MQTT.Client) {
+		if token := c.Subscribe(cfg.topic(), byte(cfg.qos), cfg.msgReceived); token.Wait() && token.Error() != nil {
+			panic(token.Error())
+		}
+	}
+	// finally create the client
+	client := MQTT.NewClient(connOpts)
+	// set up the manager
+	m.client = client
+	m.cfg = cfg
+	// return a new setup manager
+	return m, nil
+}
+
+// connect to the message broker
+func (m *EventManager) connect() error {
+	if token := m.client.Connect(); token.Wait() && token.Error() != nil {
+		return token.Error()
+	}
+	fmt.Printf("Connected to %s\n", m.cfg.server)
+	return nil
+}
+
+// disconnect from the message broker
+func (m *EventManager) disconnect(timeoutMilSecs uint) {
+	m.client.Disconnect(timeoutMilSecs)
+}

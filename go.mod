@@ -3,10 +3,8 @@ module github.com/gatblau/oxc
 go 1.13
 
 require (
-	github.com/labstack/gommon v0.3.0
-	github.com/mattn/go-colorable v0.1.6 // indirect
-	github.com/prometheus/common v0.9.1
+	github.com/eclipse/paho.mqtt.golang v1.2.0
+	github.com/google/uuid v1.1.1
 	github.com/rs/zerolog v1.18.0
-	github.com/valyala/fasttemplate v1.1.0 // indirect
-	golang.org/x/sys v0.0.0-20200406155108-e3b113bbe6a4 // indirect
+	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
 )
