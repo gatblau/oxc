@@ -24,9 +24,11 @@ import (
 	"testing"
 )
 
+// how to use the event manager
 func TestReceiver(t *testing.T) {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGTERM)
+	// create a new instance of the event manager
 	m, err := NewEventManager(EventConfig{
 		server:             "tcp://127.0.0.1:1883",
 		itemInstance:       "TEST_APP_01",
@@ -38,10 +40,12 @@ func TestReceiver(t *testing.T) {
 		t.Error(err)
 		t.Fail()
 	}
-	m.connect()
+	// connect and subscribe
+	m.Connect()
 	<-done
 }
 
+// a handler to process received messages
 func onMsgReceived(client mqtt.Client, msg mqtt.Message) {
 	fmt.Printf("Received message on topic: %s\nMessage: %s\n", msg.Topic(), msg.Payload())
 }

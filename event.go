@@ -65,7 +65,7 @@ func NewEventManager(cfg EventConfig) (*EventManager, error) {
 }
 
 // connect to the message broker
-func (m *EventManager) connect() error {
+func (m *EventManager) Connect() error {
 	if token := m.client.Connect(); token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
@@ -74,6 +74,6 @@ func (m *EventManager) connect() error {
 }
 
 // disconnect from the message broker
-func (m *EventManager) disconnect(timeoutMilSecs uint) {
+func (m *EventManager) Disconnect(timeoutMilSecs uint) {
 	m.client.Disconnect(timeoutMilSecs)
 }
