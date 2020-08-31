@@ -29,7 +29,7 @@ func TestReceiver(t *testing.T) {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGTERM)
 	// create a new instance of the event manager
-	m, err := NewEventManager(EventConfig{
+	m, err := NewEventManager(&EventConfig{
 		Server:             "tcp://127.0.0.1:1883",
 		ItemInstance:       "TEST_APP_01",
 		Qos:                2,

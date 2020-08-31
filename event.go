@@ -24,13 +24,13 @@ import (
 // MQTT client for change notifications
 type EventManager struct {
 	done   chan bool
-	cfg    EventConfig
+	cfg    *EventConfig
 	client MQTT.Client
 }
 
 // creates a new event manager subscribed to a specific topic
 // cfg: the mqtt server configuration
-func NewEventManager(cfg EventConfig) (*EventManager, error) {
+func NewEventManager(cfg *EventConfig) (*EventManager, error) {
 	// check the configuration is valid (preconditions)
 	if ok, err := cfg.isValid(); !ok {
 		return nil, err
