@@ -37,21 +37,21 @@ func NewEventManager(cfg EventConfig) (*EventManager, error) {
 	}
 	m := new(EventManager)
 	// create connection configuration
-	connOpts := MQTT.NewClientOptions().AddBroker(cfg.server).SetClientID(cfg.clientId()).SetCleanSession(true)
+	connOpts := MQTT.NewClientOptions().AddBroker(cfg.Server).SetClientID(cfg.clientId()).SetCleanSession(true)
 	// add credentials if provided
 	if cfg.hasCredentials() {
-		connOpts.SetUsername(cfg.username)
-		connOpts.SetPassword(cfg.password)
+		connOpts.SetUsername(cfg.Username)
+		connOpts.SetPassword(cfg.Password)
 	}
 	// setup tls configuration
 	tlsConfig := &tls.Config{
-		InsecureSkipVerify: cfg.insecureSkipVerify,
-		ClientAuth:         cfg.clientAuthType,
+		InsecureSkipVerify: cfg.InsecureSkipVerify,
+		ClientAuth:         cfg.ClientAuthType,
 	}
 	connOpts.SetTLSConfig(tlsConfig)
 	// subscribe to the topic on connection
 	connOpts.OnConnect = func(c MQTT.Client) {
-		if token := c.Subscribe(cfg.topic(), byte(cfg.qos), cfg.msgReceived); token.Wait() && token.Error() != nil {
+		if token := c.Subscribe(cfg.topic(), byte(cfg.Qos), cfg.OnMsgReceived); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
 	}
@@ -69,7 +69,7 @@ func (m *EventManager) Connect() error {
 	if token := m.client.Connect(); token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
-	fmt.Printf("Connected to %s\n", m.cfg.server)
+	fmt.Printf("Connected to %s\n", m.cfg.Server)
 	return nil
 }
 

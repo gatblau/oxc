@@ -30,11 +30,11 @@ func TestReceiver(t *testing.T) {
 	signal.Notify(done, os.Interrupt, syscall.SIGTERM)
 	// create a new instance of the event manager
 	m, err := NewEventManager(EventConfig{
-		server:             "tcp://127.0.0.1:1883",
-		itemInstance:       "TEST_APP_01",
-		qos:                2,
-		insecureSkipVerify: true,
-		msgReceived:        onMsgReceived,
+		Server:             "tcp://127.0.0.1:1883",
+		ItemInstance:       "TEST_APP_01",
+		Qos:                2,
+		InsecureSkipVerify: true,
+		OnMsgReceived:      onMsgReceived,
 	})
 	if err != nil {
 		t.Error(err)

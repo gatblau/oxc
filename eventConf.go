@@ -26,35 +26,35 @@ import (
 
 // configuration for the event manager (mqtt broker)
 type EventConfig struct {
-	// the MQTT server url
-	server string
+	// the MQTT Server url
+	Server string
 	// the item type for which to get notification changes (itemInstance must be empty)
-	itemType string
-	// the item instance for which to get notification changes (itemType must be empty)
-	itemInstance string
+	ItemType string
+	// the item instance for which to get notification changes (ItemType must be empty)
+	ItemInstance string
 	// the quality of service for message delivery - 0: at most once, 1: at least once, 2: exactly once
-	qos int
-	// authentication username
-	username string
-	// authentication password
-	password string
+	Qos int
+	// authentication Username
+	Username string
+	// authentication Password
+	Password string
 	// skip tls certificate verification
-	insecureSkipVerify bool
-	// the policy the server will follow for TLS Client Authentication
-	clientAuthType tls.ClientAuthType
+	InsecureSkipVerify bool
+	// the policy the Server will follow for TLS Client Authentication
+	ClientAuthType tls.ClientAuthType
 	// a function to process received messages
-	msgReceived MQTT.MessageHandler
+	OnMsgReceived MQTT.MessageHandler
 }
 
 func (c *EventConfig) hasCredentials() bool {
-	return len(c.username) > 0 && len(c.password) > 0
+	return len(c.Username) > 0 && len(c.Password) > 0
 }
 
 func (c *EventConfig) topic() string {
-	if len(c.itemInstance) > 0 {
-		return fmt.Sprintf("II_%s", c.itemInstance)
+	if len(c.ItemInstance) > 0 {
+		return fmt.Sprintf("II_%s", c.ItemInstance)
 	}
-	return fmt.Sprintf("IT_%s", c.itemType)
+	return fmt.Sprintf("IT_%s", c.ItemType)
 }
 
 // unique identifier for the client
@@ -68,19 +68,19 @@ func (c *EventConfig) clientId() string {
 
 // check the configuration is valid
 func (c *EventConfig) isValid() (bool, error) {
-	if len(c.server) == 0 {
+	if len(c.Server) == 0 {
 		return false, errors.New("server property not provided")
 	}
-	if len(c.itemInstance) > 0 && len(c.itemType) > 0 {
+	if len(c.ItemInstance) > 0 && len(c.ItemType) > 0 {
 		return false, errors.New("itemType and itemInstance both have values, only one is allowed")
 	}
-	if len(c.itemInstance) == 0 && len(c.itemType) == 0 {
+	if len(c.ItemInstance) == 0 && len(c.ItemType) == 0 {
 		return false, errors.New("itemType and itemInstance do not have values, one is required")
 	}
-	if len(c.username) > 0 && len(c.password) == 0 {
+	if len(c.Username) > 0 && len(c.Password) == 0 {
 		return false, errors.New("username with no password, provide password")
 	}
-	if c.msgReceived == nil {
+	if c.OnMsgReceived == nil {
 		return false, errors.New("a handler for received messages must be provided")
 	}
 	return true, nil
