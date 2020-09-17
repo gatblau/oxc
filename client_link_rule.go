@@ -24,8 +24,11 @@ func (c *Client) PutLinkRule(linkRule *LinkRule) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, _ := c.Put(uri, linkRule, c.addHttpHeaders)
-	return newResult(resp)
+	resp, err := c.Put(uri, linkRule, c.addHttpHeaders)
+	if resp != nil {
+		return newResult(resp)
+	}
+	return nil, err
 }
 
 // issue a Delete http request to the resource URI
