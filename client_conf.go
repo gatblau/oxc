@@ -96,6 +96,12 @@ func checkConf(cfg *ClientConf) error {
 	if len(cfg.BaseURI) == 0 {
 		return errors.New("BaseURI is not defined")
 	}
+	// if the protocol is not specified, the add http as default
+	// this is to avoid the server producing empty responses if no protocol is specified in the URI
+	if !strings.HasPrefix(strings.ToLower(cfg.BaseURI), "http") {
+		log.Warn().Msgf("no protocol defined for Onix URI '%s', 'http://' will be added to it", cfg.BaseURI)
+		cfg.BaseURI = fmt.Sprintf("http://%s", cfg.BaseURI)
+	}
 	if cfg.AuthMode == Basic {
 		if len(cfg.Username) == 0 {
 			return errors.New("username is not defined")
