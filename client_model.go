@@ -40,10 +40,7 @@ func (c *Client) DeleteModel(model *Model) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Get http request to the resource URI

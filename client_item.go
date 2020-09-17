@@ -26,10 +26,7 @@ func (c *Client) PutItem(item *Item) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, item, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -39,10 +36,7 @@ func (c *Client) DeleteItem(item *Item) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Get http request to the resource URI

@@ -22,8 +22,5 @@ func (c *Client) PutData(data *GraphData) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, data, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
-	}
-	return newResult(resp)
+	return result(resp, err)
 }

@@ -26,7 +26,9 @@ func (c *Client) PutItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error) {
 	}
 	resp, err := c.Put(uri, typeAttr, c.addHttpHeaders)
 	if resp != nil {
-		return newResult(resp)
+		if err == nil {
+			return newResult(resp)
+		}
 	}
 	return nil, err
 }
@@ -38,10 +40,7 @@ func (c *Client) DeleteItemTypeAttr(typeAttr *ItemTypeAttribute) (*Result, error
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Get http request to the resource URI

@@ -25,10 +25,7 @@ func (c *Client) PutLink(link *Link) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Put(uri, link, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -38,10 +35,7 @@ func (c *Client) DeleteLink(link *Link) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if resp != nil {
-		return newResult(resp)
-	}
-	return nil, err
+	return result(resp, err)
 }
 
 // issue a Get http request to the resource URI

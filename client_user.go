@@ -34,10 +34,7 @@ func (c *Client) PutUser(user *User, notify bool) (*Result, error) {
 		uri += "?notify=false"
 	}
 	resp, err := c.Put(uri, user, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
-	}
-	return newResult(resp)
+	return result(resp, err)
 }
 
 // issue a Delete http request to the resource URI
@@ -47,10 +44,7 @@ func (c *Client) DeleteUser(user *User) (*Result, error) {
 		return nil, err
 	}
 	resp, err := c.Delete(uri, c.addHttpHeaders)
-	if err != nil {
-		return nil, err
-	}
-	return newResult(resp)
+	return result(resp, err)
 }
 
 // issue a Get http request to the resource URI

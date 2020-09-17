@@ -47,12 +47,12 @@ func createClient() *Client {
 
 func checkResult(result *Result, err error, msg string, t *testing.T) {
 	if err != nil {
-		t.Error(msg)
+		t.Fatal(err)
 	} else if result != nil {
 		if result.Error {
-			t.Error(fmt.Sprintf("%s: %s", msg, result.Message))
+			t.Fatal(fmt.Sprintf("%s: %s", msg, result.Message))
 		} else if result.Operation == "L" {
-			t.Error(fmt.Sprintf("Fail to update - Locked Serializable: %s", result.Ref))
+			t.Fatal(fmt.Sprintf("Fail to update - Locked Serializable: %s", result.Ref))
 		}
 	}
 }
@@ -182,18 +182,18 @@ func TestOnixClient_Put(t *testing.T) {
 	data := getData()
 	result, err = client.PutData(data)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	if result.Error {
-		t.Error(result.Message)
+		t.Fatal(result.Message)
 	}
 
 	list, err := client.GetItemChildren(&Item{Key: "item_1"})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	if len(list.Values) == 0 {
-		t.Error("no value in list")
+		t.Fatal("no value in list")
 	}
 }
 

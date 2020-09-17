@@ -15,13 +15,23 @@
 */
 package oxc
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // clear all data in the database
 func (c *Client) Clear() (*Result, error) {
 	resp, err := c.Delete(fmt.Sprintf("%s/clear", c.conf.BaseURI), c.addHttpHeaders)
+	return result(resp, err)
+}
+
+// generic function to check for errors and retrieve a result
+func result(resp *http.Response, err error) (*Result, error) {
 	if resp != nil {
-		return newResult(resp)
+		if err == nil {
+			return newResult(resp)
+		}
 	}
 	return nil, err
 }
