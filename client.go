@@ -146,7 +146,7 @@ func (c *Client) MakeRequest(method string, url string, payload Serializable, pr
 
 	// do we have a nil response?
 	if resp == nil {
-		return resp, errors.New(fmt.Sprintf("error: response was empty for resource: %s", url))
+		return resp, errors.New(fmt.Sprintf("error: response was empty for resource: %s, check the service is up and running", url))
 	}
 	// check for response status
 	if resp.StatusCode >= 300 {
