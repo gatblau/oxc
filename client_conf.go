@@ -24,6 +24,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // the authentication mode type
@@ -58,6 +59,8 @@ type ClientConf struct {
 	ClientId string
 	// the password to authenticate with the token service
 	AppSecret string
+	// time out
+	Timeout time.Duration
 }
 
 // sets the AuthMode from a passed-in string
@@ -126,6 +129,11 @@ func checkConf(cfg *ClientConf) error {
 		if len(cfg.AppSecret) == 0 {
 			return errors.New("app secret is not defined")
 		}
+	}
+	// if timeout is zero, it never timeout so is not good
+	if cfg.Timeout == 0*time.Second {
+		// set a default timeout of 5 secs
+		cfg.Timeout = 5 * time.Second
 	}
 	return nil
 }

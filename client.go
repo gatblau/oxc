@@ -114,6 +114,8 @@ func NewClient(conf *ClientConf) (*Client, error) {
 					InsecureSkipVerify: conf.InsecureSkipVerify,
 				},
 			},
+			// set the client timeout period
+			Timeout: conf.Timeout,
 		},
 	}
 	return client, err
