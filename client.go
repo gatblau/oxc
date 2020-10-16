@@ -35,8 +35,21 @@ const (
 
 // all entities interface for payload serialisation
 type Serializable interface {
-	json() (*bytes.Reader, error)
+	// the reader for the payload format
+	reader() (*bytes.Reader, error)
 	bytes() (*[]byte, error)
+}
+
+// a payload for an http operation in
+type StringPayload string
+
+func (s StringPayload) reader() (*bytes.Reader, error) {
+	return bytes.NewReader([]byte(s)), nil
+}
+
+func (s StringPayload) bytes() (*[]byte, error) {
+	b := []byte(s)
+	return &b, nil
 }
 
 // modify the http request for example by adding any relevant http headers
@@ -233,7 +246,7 @@ func (c *Client) getRequestBody(payload Serializable) (*bytes.Reader, error) {
 		return bytes.NewReader([]byte{}), nil
 	}
 	// gets a byte reader to pass to the request body
-	return payload.json()
+	return payload.reader()
 }
 
 // convert the passed-in object to a JSON byte slice
