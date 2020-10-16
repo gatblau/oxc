@@ -157,17 +157,22 @@ func (c *Client) MakeRequest(method string, url string, payload Serializable, pr
 	return resp, err
 }
 
-// Make a PUT HTTP request to the WAPI
+// Make a PUT HTTP request to the specified URL
 func (c *Client) Put(url string, payload Serializable, processor HttpRequestProcessor) (*http.Response, error) {
 	return c.MakeRequest(PUT, url, payload, processor)
 }
 
-// Make a DELETE HTTP request to the WAPI
+// Make a POST HTTP request to the specified URL
+func (c *Client) Post(url string, payload Serializable, processor HttpRequestProcessor) (*http.Response, error) {
+	return c.MakeRequest(POST, url, payload, processor)
+}
+
+// Make a DELETE HTTP request to the specified URL
 func (c *Client) Delete(url string, processor HttpRequestProcessor) (*http.Response, error) {
 	return c.MakeRequest(DELETE, url, nil, processor)
 }
 
-// Make a GET HTTP request to the WAPI
+// Make a GET HTTP request to the specified URL
 func (c *Client) Get(url string, processor HttpRequestProcessor) (*http.Response, error) {
 	// create request
 	req, err := http.NewRequest(GET, url, nil)
