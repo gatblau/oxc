@@ -26,7 +26,7 @@ type LinkTypeAttributeList struct {
 	Values []LinkTypeAttribute
 }
 
-func (list *LinkTypeAttributeList) json() (*bytes.Reader, error) {
+func (list *LinkTypeAttributeList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -65,7 +65,7 @@ func (typeAttr *LinkTypeAttribute) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (typeAttr *LinkTypeAttribute) json() (*bytes.Reader, error) {
+func (typeAttr *LinkTypeAttribute) reader() (*bytes.Reader, error) {
 	jsonBytes, err := typeAttr.bytes()
 	if err != nil {
 		return nil, err

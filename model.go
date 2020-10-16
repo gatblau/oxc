@@ -27,7 +27,7 @@ type ModelList struct {
 	Values []Model
 }
 
-func (list *ModelList) json() (*bytes.Reader, error) {
+func (list *ModelList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -61,7 +61,7 @@ func (model *Model) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (model *Model) json() (*bytes.Reader, error) {
+func (model *Model) reader() (*bytes.Reader, error) {
 	jsonBytes, err := model.bytes()
 	if err != nil {
 		return nil, err

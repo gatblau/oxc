@@ -27,7 +27,7 @@ type PartitionList struct {
 	Values []Partition
 }
 
-func (list *PartitionList) json() (*bytes.Reader, error) {
+func (list *PartitionList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -60,7 +60,7 @@ func (partition *Partition) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (partition *Partition) json() (*bytes.Reader, error) {
+func (partition *Partition) reader() (*bytes.Reader, error) {
 	jsonBytes, err := partition.bytes()
 	if err != nil {
 		return nil, err

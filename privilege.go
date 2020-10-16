@@ -27,7 +27,7 @@ type PrivilegeList struct {
 	Values []Privilege
 }
 
-func (list *PrivilegeList) json() (*bytes.Reader, error) {
+func (list *PrivilegeList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -62,7 +62,7 @@ func (privilege *Privilege) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (privilege *Privilege) json() (*bytes.Reader, error) {
+func (privilege *Privilege) reader() (*bytes.Reader, error) {
 	jsonBytes, err := privilege.bytes()
 	if err != nil {
 		return nil, err

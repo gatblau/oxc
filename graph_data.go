@@ -46,7 +46,7 @@ func (data *GraphData) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (data *GraphData) json() (*bytes.Reader, error) {
+func (data *GraphData) reader() (*bytes.Reader, error) {
 	jsonBytes, err := data.bytes()
 	if err != nil {
 		return nil, err

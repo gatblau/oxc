@@ -26,7 +26,7 @@ type LinkTypeList struct {
 	Values []Item
 }
 
-func (list *LinkTypeList) json() (*bytes.Reader, error) {
+func (list *LinkTypeList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -63,7 +63,7 @@ func (linkType *LinkType) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (linkType *LinkType) json() (*bytes.Reader, error) {
+func (linkType *LinkType) reader() (*bytes.Reader, error) {
 	jsonBytes, err := linkType.bytes()
 	if err != nil {
 		return nil, err

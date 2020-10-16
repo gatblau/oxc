@@ -27,7 +27,7 @@ type UserList struct {
 	Values []User
 }
 
-func (list *UserList) json() (*bytes.Reader, error) {
+func (list *UserList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -61,7 +61,7 @@ func (user *User) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (user *User) json() (*bytes.Reader, error) {
+func (user *User) reader() (*bytes.Reader, error) {
 	jsonBytes, err := user.bytes()
 	if err != nil {
 		return nil, err

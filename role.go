@@ -27,7 +27,7 @@ type RoleList struct {
 	Values []Role
 }
 
-func (list *RoleList) json() (*bytes.Reader, error) {
+func (list *RoleList) reader() (*bytes.Reader, error) {
 	jsonBytes, err := ToJson(list)
 	return bytes.NewReader(jsonBytes), err
 }
@@ -61,7 +61,7 @@ func (role *Role) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (role *Role) json() (*bytes.Reader, error) {
+func (role *Role) reader() (*bytes.Reader, error) {
 	jsonBytes, err := role.bytes()
 	if err != nil {
 		return nil, err

@@ -73,7 +73,7 @@ func (item *Item) uri(baseUrl string) (string, error) {
 }
 
 // Get a JSON bytes reader for the Serializable
-func (item *Item) json() (*bytes.Reader, error) {
+func (item *Item) reader() (*bytes.Reader, error) {
 	jsonBytes, err := item.bytes()
 	if err != nil {
 		return nil, err
