@@ -39,6 +39,7 @@ type User struct {
 	Email     string `json:"email"`
 	Pwd       string `json:"pwd"`
 	Expires   string `json:"expires"`
+	Service   bool   `json:"service"`
 	Version   int64  `json:"version"`
 	Created   string `json:"created"`
 	Updated   string `json:"updated"`
@@ -82,8 +83,14 @@ func (user *User) valid() error {
 	if len(user.Name) == 0 {
 		return fmt.Errorf("user name is missing")
 	}
-	if len(user.Name) == 0 {
-		return fmt.Errorf("user name is missing")
+	if user.Service {
+		if len(user.Email) > 0 {
+			return fmt.Errorf("user email is not allowed on service accounts")
+		}
+	} else {
+		if len(user.Email) == 0 {
+			return fmt.Errorf("user email is required on user accounts")
+		}
 	}
 	return nil
 }

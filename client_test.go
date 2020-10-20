@@ -69,6 +69,7 @@ func TestOnixClient_Put(t *testing.T) {
 		Key:     "test_user",
 		Name:    "Test User",
 		Email:   "test@mail.com",
+		Service: false,
 		Expires: "01-01-2050 10:30:00+0100",
 	}
 
