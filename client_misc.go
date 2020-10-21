@@ -28,10 +28,14 @@ func (c *Client) Clear() (*Result, error) {
 
 // generic function to check for errors and retrieve a result
 func result(resp *http.Response, err error) (*Result, error) {
+	// if there is a response
 	if resp != nil {
-		if err == nil {
-			return newResult(resp)
+		// extract the response result
+		result, err2 := newResult(resp)
+		if err2 != nil {
+			return result, err2
 		}
+		return result, err
 	}
 	return nil, err
 }
