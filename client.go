@@ -75,19 +75,26 @@ type Result struct {
 // creates a new result from an http response
 func newResult(response *http.Response) (*Result, error) {
 	result := new(Result)
-	// de-serialise the response
+	// attempt to de-serialise the response
 	err := json.NewDecoder(response.Body).Decode(result)
-	// if the de-serialisation fails then return the error
-	if err != nil {
-		return result, err
-	}
 	// close the response
 	defer func() {
 		if ferr := response.Body.Close(); ferr != nil {
 			err = ferr
 		}
 	}()
-	// returns the result
+	// if the de-serialisation fails, it could be that the server is returning an error code
+	if err != nil {
+		// if there is an error code
+		if response.StatusCode > 299 {
+			// added to the result
+			result.Error = true
+			result.Message = response.Status
+			err = nil
+		}
+		return result, err
+	}
+	// else returns the result sent by the server
 	return result, nil
 }
 
