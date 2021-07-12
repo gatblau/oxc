@@ -58,7 +58,7 @@ func (item *Item) decode(response *http.Response) (*Item, error) {
 }
 
 // Get the ItemList in the http Response
-func (item *Item) decodeList(response *http.Response) (*ItemList, error) {
+func decodeItemList(response *http.Response) (*ItemList, error) {
 	result := new(ItemList)
 	err := json.NewDecoder(response.Body).Decode(result)
 	return result, err
@@ -103,4 +103,30 @@ func (item *Item) uriItemChildren(baseUrl string) (string, error) {
 		return "", fmt.Errorf("the item does not have a key: cannot construct Item/Children resource URI")
 	}
 	return fmt.Sprintf("%s/item/%s/children", baseUrl, item.Key), nil
+}
+
+// GetBoolAttr return the value of the boolean attribute for the specified name or false if the attribute does not exist
+func (item *Item) GetBoolAttr(name string) bool {
+	attr := item.Attribute[name]
+	if attr != nil {
+		value, ok := attr.(bool)
+		if ok {
+			return value
+		}
+		return false
+	}
+	return false
+}
+
+// GetStringAttr return the value of the string attribute for the specified name or empty if the attribute does not exist
+func (item *Item) GetStringAttr(name string) string {
+	attr := item.Attribute[name]
+	if attr != nil {
+		value, ok := attr.(string)
+		if ok {
+			return value
+		}
+		return ""
+	}
+	return ""
 }
