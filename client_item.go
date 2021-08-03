@@ -106,6 +106,31 @@ func (c *Client) GetItemsByType(itemType string) (*ItemList, error) {
 	return list, err
 }
 
+// GetChildrenByType get a list of first level children of the specified type
+func (c *Client) GetChildrenByType(item *Item, childType string) (*ItemList, error) {
+	uri, err := item.uriItemFirstLevelChildren(c.conf.BaseURI, childType)
+	if err != nil {
+		return nil, err
+	}
+
+	// make an http Get request to the service
+	result, err := c.Get(uri, c.addHttpHeaders)
+
+	if err != nil {
+		return nil, err
+	}
+
+	list, err := decodeItemList(result)
+
+	defer func() {
+		if ferr := result.Body.Close(); ferr != nil {
+			err = ferr
+		}
+	}()
+
+	return list, err
+}
+
 // uriItemsByType get the FQN for a list of items of a specified type
 func (c *Client) uriItemsByType(baseUrl, itemType string) string {
 	return fmt.Sprintf("%s/item?type=%s", baseUrl, itemType)
