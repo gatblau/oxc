@@ -105,6 +105,17 @@ func (item *Item) uriItemChildren(baseUrl string) (string, error) {
 	return fmt.Sprintf("%s/item/%s/children", baseUrl, item.Key), nil
 }
 
+func (item *Item) uriItemFirstLevelChildren(baseUrl, childType string) (string, error) {
+	if len(item.Key) == 0 {
+		return "", fmt.Errorf("the item does not have a key: cannot construct Item/Children resource URI")
+	}
+	return fmt.Sprintf("%s/item/%s/list/%s", baseUrl, item.Key, childType), nil
+}
+
+func uriItemsOfType(baseUrl, itemType string) (string, error) {
+	return fmt.Sprintf("%s/item?type=%s", baseUrl, itemType), nil
+}
+
 // GetBoolAttr return the value of the boolean attribute for the specified name or false if the attribute does not exist
 func (item *Item) GetBoolAttr(name string) bool {
 	attr := item.Attribute[name]
